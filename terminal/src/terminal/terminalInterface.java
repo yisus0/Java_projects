@@ -19,10 +19,11 @@ import javax.swing.text.StyleContext;
  */
 public class terminalInterface extends javax.swing.JFrame {
     private Object JTextArea1;
-    
+    public String string_textarea = "";
     public void sett(){
         jTextArea1.setText("Esto es un control \r\n JTextArea \r\n de varias líneas");
-        jTextArea1.setForeground(Color.RED);
+        //jTextArea1.setForeground(Color.RED);
+        jTextArea1.setForeground(Color.WHITE);
         jTextArea1.setText("Esto es un control \r\n JTextArea \r\n de varias líneas");
         jTextArea1.setEditable(false);
     }
@@ -45,27 +46,45 @@ public class terminalInterface extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(200, 200, 200));
+        jPanel1.setBackground(new java.awt.Color(100, 100, 100));
 
-        jTextArea1.setBackground(new java.awt.Color(50, 50, 50));
+        jTextArea1.setBackground(new java.awt.Color(40, 40, 50));
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
+
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 2));
+        jTextField1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 918, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 928, Short.MAX_VALUE)
+            .addComponent(jTextField1)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 43, Short.MAX_VALUE))
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -81,6 +100,20 @@ public class terminalInterface extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        System.out.println(evt.getActionCommand());
+        string_textarea += evt.getActionCommand();
+        string_textarea += "\r\n";
+        jTextArea1.setText(string_textarea);
+        System.out.println(evt.getActionCommand().length());
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+        if ( evt.getKeyCode() == 10 ) {
+            System.out.println("INTRO");
+        }
+    }//GEN-LAST:event_jTextField1KeyPressed
 
     /**
      * @param args the command line arguments
@@ -126,6 +159,7 @@ public class terminalInterface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
 
