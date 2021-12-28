@@ -9,6 +9,7 @@ import java.awt.Color;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -22,6 +23,7 @@ public class terminalInterface extends javax.swing.JFrame {
     public String string_textarea = "";
     public void jTextArea1_setup(){
         jTextArea1.setForeground(Color.WHITE);
+        //jTextArea1.setBackground(Color.white);
         jTextArea1.setEditable(false);
     }
     /**
@@ -87,13 +89,19 @@ public class terminalInterface extends javax.swing.JFrame {
 
         jComboBoxCOM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM4", "COM15" }));
 
+        jCheckBoxAutoscroll.setSelected(true);
         jCheckBoxAutoscroll.setText("Autoscroll");
+        jCheckBoxAutoscroll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxAutoscrollActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 928, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 876, Short.MAX_VALUE)
             .addComponent(jTextField1)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
@@ -110,8 +118,8 @@ public class terminalInterface extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxAutoscroll)
@@ -159,6 +167,16 @@ public class terminalInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxBaudrateActionPerformed
 
+    private void jCheckBoxAutoscrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxAutoscrollActionPerformed
+        DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
+        if ( jCheckBoxAutoscroll.isSelected() ) {
+            caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        }
+        else {
+            caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+        }
+    }//GEN-LAST:event_jCheckBoxAutoscrollActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -197,7 +215,6 @@ public class terminalInterface extends javax.swing.JFrame {
                 new terminalInterface().setVisible(true);
             }
         });*/
-
     }
    
 
