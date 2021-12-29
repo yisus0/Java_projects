@@ -6,6 +6,7 @@
 package terminal;
 
 import java.awt.Color;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
@@ -21,10 +22,14 @@ import javax.swing.text.StyleContext;
 public class terminalInterface extends javax.swing.JFrame {
     //private Object JTextArea1;
     public String string_textarea = "";
-    public void jTextArea1_setup(){
+    public void Interface_setup(){
         jTextArea1.setForeground(Color.WHITE);
         //jTextArea1.setBackground(Color.white);
         jTextArea1.setEditable(false);
+        jComboBoxBaudrate.setSelectedItem("57600");
+        String com_ports[] = {"COM4","COM15"};
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( com_ports  );
+        jComboBoxCOM.setModel( model );
     }
     /**
      * Creates new form terminalInterface
@@ -55,6 +60,7 @@ public class terminalInterface extends javax.swing.JFrame {
 
         jTextArea1.setBackground(new java.awt.Color(40, 40, 50));
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 12)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -80,14 +86,14 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxBaudrate.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "4800", "9600", "57600", "115200" }));
+        jComboBoxBaudrate.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "4800", "9600", "38400", "57600", "115200" }));
         jComboBoxBaudrate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxBaudrateActionPerformed(evt);
             }
         });
 
-        jComboBoxCOM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM4", "COM15" }));
+        jComboBoxCOM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None" }));
 
         jCheckBoxAutoscroll.setSelected(true);
         jCheckBoxAutoscroll.setText("Autoscroll");
@@ -111,7 +117,7 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jComboBoxBaudrate, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -207,7 +213,7 @@ public class terminalInterface extends javax.swing.JFrame {
         //</editor-fold>
         System.out.println("HOLAA");
         terminalInterface test = new terminalInterface();
-        test.jTextArea1_setup();
+        test.Interface_setup();
         test.setVisible(true);
         /* Create and display the form */
         /*java.awt.EventQueue.invokeLater(new Runnable() {
