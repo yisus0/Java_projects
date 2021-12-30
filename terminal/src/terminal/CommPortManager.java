@@ -9,6 +9,6 @@ package terminal;
  *
  * @author JPV
  */
-class CommPortIdentifier {
+public class CommPortManager {
     
 }

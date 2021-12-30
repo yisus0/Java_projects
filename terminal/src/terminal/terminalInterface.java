@@ -27,7 +27,7 @@ public class terminalInterface extends javax.swing.JFrame {
         //jTextArea1.setBackground(Color.white);
         jTextArea1.setEditable(false);
         jComboBoxBaudrate.setSelectedItem("57600");
-        String com_ports[] = {"COM4","COM15"};
+        String com_ports[] = {"--","COM4","COM15"};
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( com_ports  );
         jComboBoxCOM.setModel( model );
     }
@@ -51,7 +51,7 @@ public class terminalInterface extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jButtonReset = new javax.swing.JButton();
         jComboBoxBaudrate = new javax.swing.JComboBox();
         jComboBoxCOM = new javax.swing.JComboBox();
         jCheckBoxAutoscroll = new javax.swing.JCheckBox();
@@ -78,11 +78,11 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Reset");
-        jButton1.setToolTipText("");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonReset.setText("Reset");
+        jButtonReset.setToolTipText("");
+        jButtonReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonResetActionPerformed(evt);
             }
         });
 
@@ -94,6 +94,11 @@ public class terminalInterface extends javax.swing.JFrame {
         });
 
         jComboBoxCOM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None" }));
+        jComboBoxCOM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxCOMActionPerformed(evt);
+            }
+        });
 
         jCheckBoxAutoscroll.setSelected(true);
         jCheckBoxAutoscroll.setText("Autoscroll");
@@ -113,7 +118,7 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addComponent(jCheckBoxAutoscroll)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jComboBoxBaudrate, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -129,7 +134,7 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxAutoscroll)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxBaudrate, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -164,10 +169,10 @@ public class terminalInterface extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_jTextField1KeyPressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetActionPerformed
         string_textarea = "";
         jTextArea1.setText(string_textarea);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonResetActionPerformed
 
     private void jComboBoxBaudrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBaudrateActionPerformed
         // TODO add your handling code here:
@@ -182,6 +187,11 @@ public class terminalInterface extends javax.swing.JFrame {
             caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         }
     }//GEN-LAST:event_jCheckBoxAutoscrollActionPerformed
+
+    private void jComboBoxCOMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCOMActionPerformed
+        System.out.println(jComboBoxCOM.getSelectedItem());
+        System.out.println(jComboBoxBaudrate.getSelectedItem());
+    }//GEN-LAST:event_jComboBoxCOMActionPerformed
 
     /**
      * @param args the command line arguments
@@ -225,7 +235,7 @@ public class terminalInterface extends javax.swing.JFrame {
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonReset;
     private javax.swing.JCheckBox jCheckBoxAutoscroll;
     private javax.swing.JComboBox jComboBoxBaudrate;
     private javax.swing.JComboBox jComboBoxCOM;
