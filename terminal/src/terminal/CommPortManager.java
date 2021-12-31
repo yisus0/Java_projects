@@ -51,7 +51,7 @@ public class CommPortManager implements SerialPortEventListener {
     String logText = "";
     String string_textarea = "";
 
-    
+
     //search for all the serial ports
     //pre style="font-size: 11px;": none
     //post: adds all the found ports to a combo box on the GUI
@@ -72,7 +72,7 @@ public class CommPortManager implements SerialPortEventListener {
             }
         }
     }
-    
+
      public void connect() {
         String selectedPort = "COM3";
         selectedPortIdentifier = (CommPortIdentifier)portMap.get(selectedPort);
@@ -102,7 +102,7 @@ public class CommPortManager implements SerialPortEventListener {
             System.out.println(logText + "n");
         }
     }
-     
+
     //open the input and output streams
     //pre style="font-size: 11px;": an open port
     //post: initialized input and output streams for use to communicate data
@@ -125,7 +125,7 @@ public class CommPortManager implements SerialPortEventListener {
             return successful;
         }
     }
-    
+
     //starts the event listener that knows whenever data is available to be read
     //pre style="font-size: 11px;": an open serial port
     //post: an event listener for the serial port that knows when data is received
@@ -147,32 +147,7 @@ public class CommPortManager implements SerialPortEventListener {
         catch (UnsupportedCommOperationException e) {
         }*/
     }
-    
-    //disconnect the serial port
-    //pre style="font-size: 11px;": an open serial port
-    //post: closed serial port
-    public void disconnect()
-    {
-        //close the serial port
-        try {
-            //writeData(0, 0);
 
-            serialPort.removeEventListener();
-            serialPort.close();
-            input.close();
-            output.close();
-
-            logText = "Disconnected.";
-            System.out.println(logText + "n");
-        }
-        catch (Exception e)
-        {
-            logText = "Failed to close " + serialPort.getName()
-                              + "(" + e.toString() + ")";
-            System.out.println(logText + "n");
-        }
-    }
-    
     //what happens when data is received
     //pre style="font-size: 11px;": serial event is triggered
     //post: processing on the data it reads
@@ -202,11 +177,56 @@ public class CommPortManager implements SerialPortEventListener {
             }
         }
     }
-
-    /*@Override
-    public void serialEvent(SerialPortEvent spe) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
-
     
+    //method that can be called to send data
+    //pre style="font-size: 11px;": open serial port
+    //post: data sent to the other device
+    public void writeData(int leftThrottle, int rightThrottle)
+    {
+        try
+        {
+            output.write(leftThrottle);
+            output.flush();
+            //this is a delimiter for the data
+            output.write(DASH_ASCII);
+            output.flush();
+
+            output.write(rightThrottle);
+            output.flush();
+            //will be read as a byte so it is a space key
+            output.write(SPACE_ASCII);
+            output.flush();
+        }
+        catch (Exception e)
+        {
+            logText = "Failed to write data. (" + e.toString() + ")";
+            System.out.println(logText + "n");
+        }
+    }
+
+    //disconnect the serial port
+    //pre style="font-size: 11px;": an open serial port
+    //post: closed serial port
+    public void disconnect()
+    {
+        //close the serial port
+        try {
+            //writeData(0, 0);
+
+            serialPort.removeEventListener();
+            serialPort.close();
+            input.close();
+            output.close();
+
+            logText = "Disconnected.";
+            System.out.println(logText + "n");
+        }
+        catch (Exception e)
+        {
+            logText = "Failed to close " + serialPort.getName()
+                              + "(" + e.toString() + ")";
+            System.out.println(logText + "n");
+        }
+    }
+ 
 }
