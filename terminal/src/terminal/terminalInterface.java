@@ -225,12 +225,21 @@ public class terminalInterface extends javax.swing.JFrame {
         terminalInterface test = new terminalInterface();
         test.Interface_setup();
         test.setVisible(true);
+        CommPortManager commPortManager = new CommPortManager();
+        commPortManager.searchForPorts();
+        commPortManager.connect();
+        boolean successful = commPortManager.initIOStream();
+        if ( successful ) {
+            commPortManager.initListener();
+        }
+        //commPortManager.disconnect();
         /* Create and display the form */
         /*java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new terminalInterface().setVisible(true);
             }
         });*/
+        System.out.println("ADIOS");
     }
    
 
