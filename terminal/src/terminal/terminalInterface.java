@@ -7,6 +7,7 @@ package terminal;
 
 import java.awt.Color;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
@@ -20,8 +21,15 @@ import javax.swing.text.StyleContext;
  * @author JPV
  */
 public class terminalInterface extends javax.swing.JFrame {
-    //private Object JTextArea1;
-    public String string_textarea = "";
+    //static private Object JTextArea1;
+    static public String string_textarea = ""; 
+    
+    static CommPortManager commPortManager = new CommPortManager((String data) -> {
+        string_textarea += data;
+        System.out.println(string_textarea);
+        //jTextArea1.setText(string_textarea);
+    });
+
     public void Interface_setup(){
         jTextArea1.setForeground(Color.WHITE);
         //jTextArea1.setBackground(Color.white);
@@ -36,6 +44,10 @@ public class terminalInterface extends javax.swing.JFrame {
      */
     public terminalInterface() {
         initComponents();
+    }
+    
+    public void get_callback() {
+        
     }
 
     /**
@@ -172,6 +184,13 @@ public class terminalInterface extends javax.swing.JFrame {
     private void jButtonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetActionPerformed
         string_textarea = "";
         jTextArea1.setText(string_textarea);
+        /*commPortManager.disconnect();
+        commPortManager.searchForPorts();
+        commPortManager.connect();
+        boolean successful = commPortManager.initIOStream();
+        if ( successful ) {
+            commPortManager.initListener();
+        }*/
     }//GEN-LAST:event_jButtonResetActionPerformed
 
     private void jComboBoxBaudrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBaudrateActionPerformed
@@ -225,7 +244,7 @@ public class terminalInterface extends javax.swing.JFrame {
         terminalInterface test = new terminalInterface();
         test.Interface_setup();
         test.setVisible(true);
-        CommPortManager commPortManager = new CommPortManager();
+
         commPortManager.searchForPorts();
         commPortManager.connect();
         boolean successful = commPortManager.initIOStream();
@@ -240,6 +259,14 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });*/
         System.out.println("ADIOS");
+        /*int data_len = 0;
+        while (true) {
+            System.out.println(string_textarea.length());
+            if ( string_textarea.length() > data_len ) {
+                data_len = string_textarea.length();
+                jTextArea1.setText(string_textarea);
+            }
+        }*/
     }
    
 
@@ -250,7 +277,7 @@ public class terminalInterface extends javax.swing.JFrame {
     private javax.swing.JComboBox jComboBoxCOM;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private static javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

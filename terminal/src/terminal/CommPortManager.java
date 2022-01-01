@@ -14,12 +14,14 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.TooManyListenersException;
 
+
 /**
  *
  * @author JPV
  */
 public class CommPortManager implements SerialPortEventListener {
     
+    private final CommPortCallback callback;
     //for containing the ports that will be found
     private Enumeration ports = null;
     //map the port names to CommPortIdentifiers
@@ -50,7 +52,6 @@ public class CommPortManager implements SerialPortEventListener {
     //this string is written to the GUI
     String logText = "";
     String string_textarea = "";
-
 
     //search for all the serial ports
     //pre style="font-size: 11px;": none
@@ -141,11 +142,11 @@ public class CommPortManager implements SerialPortEventListener {
             logText = "Too many listeners. (" + e.toString() + ")";
             System.out.println(logText + "n");
         }
-        /*try {
+        try {
             serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,SerialPort.PARITY_NONE);
         }
         catch (UnsupportedCommOperationException e) {
-        }*/
+        }
     }
 
     //what happens when data is received
@@ -165,10 +166,15 @@ public class CommPortManager implements SerialPortEventListener {
                 else
                 {
                     System.out.println("n");
-                }*/
+                }*//*
                 char data = (char)singleData;
-                System.out.print(data);
-                //jTextArea1.setText(string_textarea);
+                callback.callback(data);*/
+                string_textarea += (char)singleData;
+                if (singleData == NEW_LINE_ASCII) {
+                    callback.callback(string_textarea);
+                    string_textarea = "";
+                }
+
             }
             catch (Exception e)
             {
@@ -181,8 +187,7 @@ public class CommPortManager implements SerialPortEventListener {
     //method that can be called to send data
     //pre style="font-size: 11px;": open serial port
     //post: data sent to the other device
-    public void writeData(int leftThrottle, int rightThrottle)
-    {
+    public void writeData(int leftThrottle, int rightThrottle) {
         try
         {
             output.write(leftThrottle);
@@ -207,8 +212,7 @@ public class CommPortManager implements SerialPortEventListener {
     //disconnect the serial port
     //pre style="font-size: 11px;": an open serial port
     //post: closed serial port
-    public void disconnect()
-    {
+    public void disconnect() {
         //close the serial port
         try {
             //writeData(0, 0);
@@ -228,5 +232,9 @@ public class CommPortManager implements SerialPortEventListener {
             System.out.println(logText + "n");
         }
     }
- 
+    
+    public CommPortManager(CommPortCallback callback) {
+
+        this.callback = callback;
+    }
 }
