@@ -152,7 +152,6 @@ public class CommPortManager implements SerialPortEventListener {
     //what happens when data is received
     //pre style="font-size: 11px;": serial event is triggered
     //post: processing on the data it reads
-    @Override
     public void serialEvent(SerialPortEvent evt) {
         if (evt.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try

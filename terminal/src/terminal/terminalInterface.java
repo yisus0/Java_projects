@@ -27,8 +27,12 @@ public class terminalInterface extends javax.swing.JFrame {
     static CommPortManager commPortManager = new CommPortManager((String data) -> {
         string_textarea += data;
         System.out.println(string_textarea);
-        //jTextArea1.setText(string_textarea);
+        setTextAreaText();
     });
+    
+    static public void setTextAreaText () {
+        jTextArea1.setText(string_textarea);
+    }
 
     public void Interface_setup(){
         jTextArea1.setForeground(Color.WHITE);
@@ -44,10 +48,6 @@ public class terminalInterface extends javax.swing.JFrame {
      */
     public terminalInterface() {
         initComponents();
-    }
-    
-    public void get_callback() {
-        
     }
 
     /**
@@ -240,7 +240,7 @@ public class terminalInterface extends javax.swing.JFrame {
         }
         
         //</editor-fold>
-        System.out.println("HOLAA");
+        System.out.println("HOLA");
         terminalInterface test = new terminalInterface();
         test.Interface_setup();
         test.setVisible(true);
@@ -251,22 +251,7 @@ public class terminalInterface extends javax.swing.JFrame {
         if ( successful ) {
             commPortManager.initListener();
         }
-        //commPortManager.disconnect();
-        /* Create and display the form */
-        /*java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new terminalInterface().setVisible(true);
-            }
-        });*/
         System.out.println("ADIOS");
-        /*int data_len = 0;
-        while (true) {
-            System.out.println(string_textarea.length());
-            if ( string_textarea.length() > data_len ) {
-                data_len = string_textarea.length();
-                jTextArea1.setText(string_textarea);
-            }
-        }*/
     }
    
 
