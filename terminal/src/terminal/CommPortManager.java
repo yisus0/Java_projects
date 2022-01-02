@@ -175,23 +175,11 @@ public class CommPortManager implements SerialPortEventListener {
             try
             {
                 byte singleData = (byte)input.read();
-                /*if (singleData != NEW_LINE_ASCII)
-                {
-                    logText = new String(new byte[] {singleData});
-                    System.out.println(logText+"888");
-                }
-                else
-                {
-                    System.out.println("n");
-                }*//*
-                char data = (char)singleData;
-                callback.callback(data);*/
                 string_textarea += (char)singleData;
                 if (singleData == NEW_LINE_ASCII || singleData > 128) {
                     callback.callback(string_textarea);
                     string_textarea = "";
                 }
-
             }
             catch (Exception e)
             {
@@ -204,19 +192,10 @@ public class CommPortManager implements SerialPortEventListener {
     //method that can be called to send data
     //pre style="font-size: 11px;": open serial port
     //post: data sent to the other device
-    public void writeData(int leftThrottle, int rightThrottle) {
-        try
-        {
-            output.write(leftThrottle);
-            output.flush();
-            //this is a delimiter for the data
-            output.write(DASH_ASCII);
-            output.flush();
-
-            output.write(rightThrottle);
-            output.flush();
-            //will be read as a byte so it is a space key
-            output.write(SPACE_ASCII);
+    public void writeData(String data) {
+        byte[] data_array = data.getBytes();
+        try {
+            output.write( data_array );
             output.flush();
         }
         catch (Exception e)

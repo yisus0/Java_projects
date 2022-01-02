@@ -28,7 +28,7 @@ public class terminalInterface extends javax.swing.JFrame {
     
     static CommPortManager commPortManager = new CommPortManager((String data) -> {
         string_textarea += data;
-        System.out.println(string_textarea);
+        //System.out.println(string_textarea);
         setTextAreaText();
     });
     
@@ -180,11 +180,11 @@ public class terminalInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        string_textarea += evt.getActionCommand();
-        if ( evt.getActionCommand().length() != 0 ) {
-            string_textarea += "\r\n";
+        String input_data = evt.getActionCommand();
+        if ( evt.getActionCommand().length() != 0 && commPortManager.get_current_port() != commPortManager.undefinedPort ) {
+            input_data += "\r\n";
+            commPortManager.writeData( input_data );
         }
-        jTextArea1.setText(string_textarea);
         jTextField1.setText("");
     }//GEN-LAST:event_jTextField1ActionPerformed
 
