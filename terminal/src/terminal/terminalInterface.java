@@ -23,10 +23,13 @@ import javax.swing.text.StyleContext;
  * @author JPV
  */
 public class terminalInterface extends javax.swing.JFrame {
-    //static private Object JTextArea1;
     static public String string_textarea = ""; 
+    static boolean enable_show_time = false;
     
     static CommPortManager commPortManager = new CommPortManager((String data) -> {
+        if ( enable_show_time ) {
+            string_textarea += java.time.LocalTime.now() + " | ";
+        }
         string_textarea += data;
         setTextAreaText();
     });
@@ -66,6 +69,7 @@ public class terminalInterface extends javax.swing.JFrame {
         jComboBoxCOM = new javax.swing.JComboBox();
         jCheckBoxAutoscroll = new javax.swing.JCheckBox();
         jButtonClean = new javax.swing.JButton();
+        jCheckBoxShowTime = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,6 +130,13 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
+        jCheckBoxShowTime.setText("Show time");
+        jCheckBoxShowTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxShowTimeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -135,7 +146,9 @@ public class terminalInterface extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(jCheckBoxAutoscroll)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBoxShowTime)
+                .addGap(34, 34, 34)
                 .addComponent(jButtonClean, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -157,7 +170,8 @@ public class terminalInterface extends javax.swing.JFrame {
                     .addComponent(jComboBoxBaudrate, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonClean)
-                    .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBoxShowTime))
                 .addContainerGap())
         );
 
@@ -219,6 +233,15 @@ public class terminalInterface extends javax.swing.JFrame {
     private void jButtonCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCleanActionPerformed
         clean();
     }//GEN-LAST:event_jButtonCleanActionPerformed
+
+    private void jCheckBoxShowTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxShowTimeActionPerformed
+        if ( jCheckBoxShowTime.isSelected() ) {
+            enable_show_time = true;
+        }
+        else {
+            enable_show_time = false;
+        }
+    }//GEN-LAST:event_jCheckBoxShowTimeActionPerformed
 
     static private void set_com_ports_list() {
         ArrayList<String> ports_list = commPortManager.searchForPorts();
@@ -307,6 +330,7 @@ public class terminalInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButtonClean;
     private javax.swing.JButton jButtonReset;
     private javax.swing.JCheckBox jCheckBoxAutoscroll;
+    private javax.swing.JCheckBox jCheckBoxShowTime;
     private javax.swing.JComboBox jComboBoxBaudrate;
     private static javax.swing.JComboBox jComboBoxCOM;
     private javax.swing.JPanel jPanel1;
