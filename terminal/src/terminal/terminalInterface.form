@@ -43,7 +43,9 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                   <Component id="jCheckBoxAutoscroll" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jButtonClean" min="-2" pref="67" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jButtonReset" min="-2" pref="67" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jComboBoxBaudrate" min="-2" pref="74" max="-2" attributes="0"/>
@@ -62,11 +64,12 @@
                   <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jCheckBoxAutoscroll" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButtonReset" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                       <Component id="jComboBoxBaudrate" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                       <Component id="jComboBoxCOM" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                      <Component id="jButtonClean" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonReset" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -164,6 +167,14 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxAutoscrollActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonClean">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Clean"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCleanActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

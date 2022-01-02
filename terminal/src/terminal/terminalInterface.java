@@ -69,6 +69,7 @@ public class terminalInterface extends javax.swing.JFrame {
         jComboBoxBaudrate = new javax.swing.JComboBox();
         jComboBoxCOM = new javax.swing.JComboBox();
         jCheckBoxAutoscroll = new javax.swing.JCheckBox();
+        jButtonClean = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -122,6 +123,13 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
+        jButtonClean.setText("Clean");
+        jButtonClean.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCleanActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -131,7 +139,9 @@ public class terminalInterface extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(jCheckBoxAutoscroll)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonClean, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jComboBoxBaudrate, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -148,9 +158,10 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxAutoscroll)
-                    .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxBaudrate, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonClean)
+                    .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -211,6 +222,10 @@ public class terminalInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jComboBoxCOMActionPerformed
 
+    private void jButtonCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCleanActionPerformed
+        clean();
+    }//GEN-LAST:event_jButtonCleanActionPerformed
+
     static private void set_com_ports_list() {
         ArrayList<String> ports_list = commPortManager.searchForPorts();
         String ports_array[] = null;
@@ -225,7 +240,7 @@ public class terminalInterface extends javax.swing.JFrame {
     
     private void start_stream(String port, String baud_rate_0 ) {
 
-        if( port == "--" ) {
+        if( port == commPortManager.undefinedPort ) {
             return;
         }
         if( commPortManager.get_current_port() != commPortManager.undefinedPort ) {
@@ -271,18 +286,14 @@ public class terminalInterface extends javax.swing.JFrame {
         }
         
         //</editor-fold>
+        /*DefaultCaret caret_init = (DefaultCaret)jTextArea1.getCaret();
+        caret_init.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);*/
         System.out.println("HOLA");
         terminalInterface test = new terminalInterface();
         test.Interface_setup();
         test.setVisible(true);
 
         set_com_ports_list();
-        //commPortManager.searchForPorts();
-        /*commPortManager.connect();
-        boolean successful = commPortManager.initIOStream();
-        if ( successful ) {
-            commPortManager.initListener();
-        }*/
         System.out.println("ADIOS");
     }
     
@@ -293,6 +304,7 @@ public class terminalInterface extends javax.swing.JFrame {
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonClean;
     private javax.swing.JButton jButtonReset;
     private javax.swing.JCheckBox jCheckBoxAutoscroll;
     private javax.swing.JComboBox jComboBoxBaudrate;
