@@ -28,7 +28,6 @@ public class terminalInterface extends javax.swing.JFrame {
     
     static CommPortManager commPortManager = new CommPortManager((String data) -> {
         string_textarea += data;
-        //System.out.println(string_textarea);
         setTextAreaText();
     });
     
@@ -41,9 +40,6 @@ public class terminalInterface extends javax.swing.JFrame {
         //jTextArea1.setBackground(Color.white);
         jTextArea1.setEditable(false);
         jComboBoxBaudrate.setSelectedItem("57600");
-        /*String com_ports[] = {"--","COM4","COM15"};
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( com_ports  );
-        jComboBoxCOM.setModel( model );*/
     }
     /**
      * Creates new form terminalInterface
@@ -189,9 +185,7 @@ public class terminalInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
-        /*if ( evt.getKeyCode() == 10 ) {
-            System.out.println("INTRO");
-        }*/
+
     }//GEN-LAST:event_jTextField1KeyPressed
 
     private void jButtonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetActionPerformed
@@ -258,6 +252,11 @@ public class terminalInterface extends javax.swing.JFrame {
             System.out.println("Error de puerto");
         }
     }
+
+    static public void init_scroll() {
+        DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+    }
     /**
      * @param args the command line arguments
      */
@@ -292,6 +291,7 @@ public class terminalInterface extends javax.swing.JFrame {
         terminalInterface test = new terminalInterface();
         test.Interface_setup();
         test.setVisible(true);
+        init_scroll();
 
         set_com_ports_list();
         System.out.println("ADIOS");
