@@ -10,6 +10,7 @@ import static java.awt.SystemColor.window;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.TooManyListenersException;
@@ -52,14 +53,31 @@ public class CommPortManager implements SerialPortEventListener {
     //this string is written to the GUI
     String logText = "";
     String string_textarea = "";
+    
+    public String undefinedPort = "--";
+    String selectedPort = undefinedPort;
+    String currentPort = undefinedPort;
+    int baud_rate = 0;
+
+    public void set_com_parameters(String port, int baud_rate_0 ) {
+        selectedPort = port;
+        baud_rate = baud_rate_0;
+        System.out.println(port);
+        System.out.println(baud_rate_0);
+    }
+    
+    public String get_current_port() {
+        return currentPort;
+    }
 
     //search for all the serial ports
     //pre style="font-size: 11px;": none
     //post: adds all the found ports to a combo box on the GUI
-    public void searchForPorts()
-    {
+    public ArrayList<String> searchForPorts() {
         ports = CommPortIdentifier.getPortIdentifiers();
-
+        ArrayList<String> ports_list = new ArrayList<String>();
+        ports_list.add( undefinedPort );
+        
         while (ports.hasMoreElements())
         {
             CommPortIdentifier curPort = (CommPortIdentifier)ports.nextElement();
@@ -67,15 +85,15 @@ public class CommPortManager implements SerialPortEventListener {
             //get only serial ports
             if (curPort.getPortType() == CommPortIdentifier.PORT_SERIAL)
             {
-                //window.cboxPorts.addItem(curPort.getName());
-                System.out.println(curPort.getName());
                 portMap.put(curPort.getName(), curPort);
+                ports_list.add( curPort.getName() );
             }
         }
+        return ports_list;
     }
 
      public void connect() {
-        String selectedPort = "COM3";
+        
         selectedPortIdentifier = (CommPortIdentifier)portMap.get(selectedPort);
 
         CommPort commPort = null;
@@ -116,7 +134,7 @@ public class CommPortManager implements SerialPortEventListener {
             input = serialPort.getInputStream();
             output = serialPort.getOutputStream();
             //writeData(0, 0);
-
+            currentPort = selectedPort;
             successful = true;
             return successful;
         }
@@ -143,7 +161,7 @@ public class CommPortManager implements SerialPortEventListener {
             System.out.println(logText + "n");
         }
         try {
-            serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,SerialPort.PARITY_NONE);
+            serialPort.setSerialPortParams(baud_rate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,SerialPort.PARITY_NONE);
         }
         catch (UnsupportedCommOperationException e) {
         }
@@ -169,7 +187,7 @@ public class CommPortManager implements SerialPortEventListener {
                 char data = (char)singleData;
                 callback.callback(data);*/
                 string_textarea += (char)singleData;
-                if (singleData == NEW_LINE_ASCII) {
+                if (singleData == NEW_LINE_ASCII || singleData > 128) {
                     callback.callback(string_textarea);
                     string_textarea = "";
                 }

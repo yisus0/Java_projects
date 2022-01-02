@@ -6,6 +6,8 @@
 package terminal;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -39,9 +41,9 @@ public class terminalInterface extends javax.swing.JFrame {
         //jTextArea1.setBackground(Color.white);
         jTextArea1.setEditable(false);
         jComboBoxBaudrate.setSelectedItem("57600");
-        String com_ports[] = {"--","COM4","COM15"};
+        /*String com_ports[] = {"--","COM4","COM15"};
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( com_ports  );
-        jComboBoxCOM.setModel( model );
+        jComboBoxCOM.setModel( model );*/
     }
     /**
      * Creates new form terminalInterface
@@ -182,15 +184,7 @@ public class terminalInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1KeyPressed
 
     private void jButtonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetActionPerformed
-        string_textarea = "";
-        jTextArea1.setText(string_textarea);
-        /*commPortManager.disconnect();
-        commPortManager.searchForPorts();
-        commPortManager.connect();
-        boolean successful = commPortManager.initIOStream();
-        if ( successful ) {
-            commPortManager.initListener();
-        }*/
+        start_stream( (String)jComboBoxCOM.getSelectedItem(), (String)jComboBoxBaudrate.getSelectedItem() );
     }//GEN-LAST:event_jButtonResetActionPerformed
 
     private void jComboBoxBaudrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBaudrateActionPerformed
@@ -208,10 +202,47 @@ public class terminalInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxAutoscrollActionPerformed
 
     private void jComboBoxCOMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCOMActionPerformed
-        System.out.println(jComboBoxCOM.getSelectedItem());
-        System.out.println(jComboBoxBaudrate.getSelectedItem());
+        /*System.out.println(jComboBoxCOM.getSelectedItem());
+        System.out.println(jComboBoxBaudrate.getSelectedItem());*/
+        
+        start_stream( (String)jComboBoxCOM.getSelectedItem(), (String)jComboBoxBaudrate.getSelectedItem() );
+        if ( commPortManager.get_current_port() != commPortManager.undefinedPort ) {
+            jComboBoxCOM.setSelectedItem(commPortManager.get_current_port());
+        }
     }//GEN-LAST:event_jComboBoxCOMActionPerformed
 
+    static private void set_com_ports_list() {
+        ArrayList<String> ports_list = commPortManager.searchForPorts();
+        String ports_array[] = null;
+
+        if ( ports_list.size() > 0 ) {
+            ports_array = ports_list.toArray(new String[0]);
+        }
+
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( ports_array );
+        jComboBoxCOM.setModel((ComboBoxModel) model);
+    }
+    
+    private void start_stream(String port, String baud_rate_0 ) {
+
+        if( port == "--" ) {
+            return;
+        }
+        if( commPortManager.get_current_port() != commPortManager.undefinedPort ) {
+            commPortManager.disconnect();
+        }
+        clean();
+        int baud_rate = Integer.parseInt(baud_rate_0);
+        commPortManager.set_com_parameters( port, baud_rate );
+        commPortManager.connect();
+        boolean successful = commPortManager.initIOStream();
+        if ( successful ) {
+            commPortManager.initListener();
+        }
+        else {
+            System.out.println("Error de puerto");
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -245,13 +276,19 @@ public class terminalInterface extends javax.swing.JFrame {
         test.Interface_setup();
         test.setVisible(true);
 
-        commPortManager.searchForPorts();
-        commPortManager.connect();
+        set_com_ports_list();
+        //commPortManager.searchForPorts();
+        /*commPortManager.connect();
         boolean successful = commPortManager.initIOStream();
         if ( successful ) {
             commPortManager.initListener();
-        }
+        }*/
         System.out.println("ADIOS");
+    }
+    
+    public void clean(){
+        string_textarea = "";
+        jTextArea1.setText(string_textarea);
     }
    
 
@@ -259,7 +296,7 @@ public class terminalInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButtonReset;
     private javax.swing.JCheckBox jCheckBoxAutoscroll;
     private javax.swing.JComboBox jComboBoxBaudrate;
-    private javax.swing.JComboBox jComboBoxCOM;
+    private static javax.swing.JComboBox jComboBoxCOM;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTextArea jTextArea1;
