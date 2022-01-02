@@ -171,14 +171,18 @@ public class CommPortManager implements SerialPortEventListener {
     //pre style="font-size: 11px;": serial event is triggered
     //post: processing on the data it reads
     public void serialEvent(SerialPortEvent evt) {
-        if (evt.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+        if ( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE ) {
             try
-            {
-                byte singleData = (byte)input.read();
-                string_textarea += (char)singleData;
-                if (singleData == NEW_LINE_ASCII || singleData > 128) {
-                    callback.callback(string_textarea);
-                    string_textarea = "";
+            {   
+                while( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE ) {
+                    byte singleData = (byte)input.read();
+                    string_textarea += (char)singleData;
+
+                    if (singleData == NEW_LINE_ASCII || singleData > 128) {
+                        callback.callback(string_textarea);
+                        //System.out.print(string_textarea);
+                        string_textarea = "";
+                    }
                 }
             }
             catch (Exception e)
@@ -193,6 +197,7 @@ public class CommPortManager implements SerialPortEventListener {
     //pre style="font-size: 11px;": open serial port
     //post: data sent to the other device
     public void writeData(String data) {
+        System.out.println("Envio datos!!");
         byte[] data_array = data.getBytes();
         try {
             output.write( data_array );
