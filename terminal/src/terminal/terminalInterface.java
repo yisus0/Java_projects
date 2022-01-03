@@ -6,6 +6,8 @@
 package terminal;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -27,6 +29,13 @@ public class terminalInterface extends javax.swing.JFrame {
 
     static public String string_textarea = ""; 
     static boolean enable_show_time = false;
+    
+    @Override
+    public Image getIconImage() {
+        Image retValue = Toolkit.getDefaultToolkit().
+        getImage(ClassLoader.getSystemResource("resources/terminal.png"));
+        return retValue;
+     }
 
     static CommPortManager commPortManager = new CommPortManager((String data) -> {
         if ( enable_show_time ) {
@@ -75,6 +84,7 @@ public class terminalInterface extends javax.swing.JFrame {
         jButtonClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setIconImage(getIconImage());
 
         jTextArea1.setBackground(new java.awt.Color(40, 40, 50));
         jTextArea1.setColumns(20);
