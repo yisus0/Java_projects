@@ -272,6 +272,7 @@ public class terminalInterface extends javax.swing.JFrame {
             jComboBoxCOM.setSelectedItem("--");
             clean();
         }
+        this.setTitle( "" );
     }//GEN-LAST:event_jButtonCloseActionPerformed
 
     static private void set_com_ports_list() {
