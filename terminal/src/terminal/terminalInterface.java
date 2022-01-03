@@ -6,11 +6,13 @@
 package terminal;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.DefaultCaret;
@@ -23,9 +25,10 @@ import javax.swing.text.StyleContext;
  * @author JPV
  */
 public class terminalInterface extends javax.swing.JFrame {
+
     static public String string_textarea = ""; 
     static boolean enable_show_time = false;
-    
+
     static CommPortManager commPortManager = new CommPortManager((String data) -> {
         if ( enable_show_time ) {
             string_textarea += java.time.LocalTime.now() + " | ";
@@ -285,10 +288,16 @@ public class terminalInterface extends javax.swing.JFrame {
         clean();
         int baud_rate = Integer.parseInt(baud_rate_0);
         commPortManager.set_com_parameters( port, baud_rate );
-        commPortManager.connect();
+        if ( !commPortManager.connect() ) {
+            this.setTitle( "ERROR" );
+            jTextArea1.setText("ERROR. Failed to open " + port + "\r\n" );
+            jComboBoxCOM.setSelectedItem("--");
+            return;
+        }
         boolean successful = commPortManager.initIOStream();
         if ( successful ) {
             commPortManager.initListener();
+            this.setTitle( port );
         }
         else {
             System.out.println("Error de puerto");
@@ -299,6 +308,12 @@ public class terminalInterface extends javax.swing.JFrame {
         DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
     }
+    
+    public void clean(){
+        string_textarea = "";
+        jTextArea1.setText(string_textarea);
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -338,12 +353,7 @@ public class terminalInterface extends javax.swing.JFrame {
         set_com_ports_list();
         System.out.println("ADIOS");
     }
-    
-    public void clean(){
-        string_textarea = "";
-        jTextArea1.setText(string_textarea);
-    }
-   
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClean;

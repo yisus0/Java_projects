@@ -93,7 +93,7 @@ public class CommPortManager implements SerialPortEventListener {
         return ports_list;
     }
 
-     public void connect() {
+     public boolean connect() {
         disconnection_demand = false;
         selectedPortIdentifier = (CommPortIdentifier)portMap.get(selectedPort);
 
@@ -109,17 +109,19 @@ public class CommPortManager implements SerialPortEventListener {
             //logging
             logText = selectedPort + " opened successfully.";
             System.out.println(logText + "n");
-
+            return true;
         }
         catch (PortInUseException e)
         {
             logText = selectedPort + " is in use. (" + e.toString() + ")";
             System.out.println(logText + "n");
+            return false;
         }
         catch (Exception e)
         {
             logText = "Failed to open " + selectedPort + "(" + e.toString() + ")";
             System.out.println(logText + "n");
+            return false;
         }
     }
 
