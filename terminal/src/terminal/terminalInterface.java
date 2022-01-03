@@ -70,6 +70,7 @@ public class terminalInterface extends javax.swing.JFrame {
         jCheckBoxAutoscroll = new javax.swing.JCheckBox();
         jButtonClean = new javax.swing.JButton();
         jCheckBoxShowTime = new javax.swing.JCheckBox();
+        jButtonClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -137,6 +138,13 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
+        jButtonClose.setText("Close");
+        jButtonClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCloseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -148,15 +156,17 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addComponent(jCheckBoxAutoscroll)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxShowTime)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonClean, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jComboBoxBaudrate, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,7 +181,8 @@ public class terminalInterface extends javax.swing.JFrame {
                     .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonClean)
                     .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBoxShowTime))
+                    .addComponent(jCheckBoxShowTime)
+                    .addComponent(jButtonClose))
                 .addContainerGap())
         );
 
@@ -242,6 +253,14 @@ public class terminalInterface extends javax.swing.JFrame {
             enable_show_time = false;
         }
     }//GEN-LAST:event_jCheckBoxShowTimeActionPerformed
+
+    private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
+        if( commPortManager.get_current_port() != commPortManager.undefinedPort ) {
+            commPortManager.disconnect();
+            jComboBoxCOM.setSelectedItem("--");
+            clean();
+        }
+    }//GEN-LAST:event_jButtonCloseActionPerformed
 
     static private void set_com_ports_list() {
         ArrayList<String> ports_list = commPortManager.searchForPorts();
@@ -328,6 +347,7 @@ public class terminalInterface extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClean;
+    private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonReset;
     private javax.swing.JCheckBox jCheckBoxAutoscroll;
     private javax.swing.JCheckBox jCheckBoxShowTime;

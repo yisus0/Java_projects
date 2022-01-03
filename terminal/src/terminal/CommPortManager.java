@@ -58,6 +58,7 @@ public class CommPortManager implements SerialPortEventListener {
     String selectedPort = undefinedPort;
     String currentPort = undefinedPort;
     int baud_rate = 0;
+    boolean disconnection_demand = false;
 
     public void set_com_parameters(String port, int baud_rate_0 ) {
         selectedPort = port;
@@ -93,7 +94,7 @@ public class CommPortManager implements SerialPortEventListener {
     }
 
      public void connect() {
-        
+        disconnection_demand = false;
         selectedPortIdentifier = (CommPortIdentifier)portMap.get(selectedPort);
 
         CommPort commPort = null;
@@ -104,7 +105,7 @@ public class CommPortManager implements SerialPortEventListener {
             commPort = selectedPortIdentifier.open("TigerControlPanel", TIMEOUT);
             //the CommPort object can be casted to a SerialPort object
             serialPort = (SerialPort)commPort;;
-
+            
             //logging
             logText = selectedPort + " opened successfully.";
             System.out.println(logText + "n");
@@ -174,7 +175,7 @@ public class CommPortManager implements SerialPortEventListener {
         if ( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE ) {
             try
             {   
-                while( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE ) {
+                while( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE && !disconnection_demand ) {
                     byte singleData = (byte)input.read();
                     string_textarea += (char)singleData;
 
@@ -197,7 +198,6 @@ public class CommPortManager implements SerialPortEventListener {
     //pre style="font-size: 11px;": open serial port
     //post: data sent to the other device
     public void writeData(String data) {
-        System.out.println("Envio datos!!");
         byte[] data_array = data.getBytes();
         try {
             output.write( data_array );
@@ -214,15 +214,13 @@ public class CommPortManager implements SerialPortEventListener {
     //pre style="font-size: 11px;": an open serial port
     //post: closed serial port
     public void disconnect() {
-        //close the serial port
+        disconnection_demand = true;
         try {
-            //writeData(0, 0);
-
             serialPort.removeEventListener();
             serialPort.close();
             input.close();
             output.close();
-
+            currentPort = undefinedPort;
             logText = "Disconnected.";
             System.out.println(logText + "n");
         }
