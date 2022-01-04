@@ -29,6 +29,7 @@ public class terminalInterface extends javax.swing.JFrame {
 
     static public String string_textarea = ""; 
     static boolean enable_show_time = false;
+    String input_ending = "\r\n";
     
     @Override
     public Image getIconImage() {
@@ -54,6 +55,7 @@ public class terminalInterface extends javax.swing.JFrame {
         //jTextArea1.setBackground(Color.white);
         jTextArea1.setEditable(false);
         jComboBoxBaudrate.setSelectedItem("57600");
+        jComboBoxInputEnding.setSelectedItem("CR & NL");
     }
     /**
      * Creates new form terminalInterface
@@ -82,6 +84,7 @@ public class terminalInterface extends javax.swing.JFrame {
         jButtonClean = new javax.swing.JButton();
         jCheckBoxShowTime = new javax.swing.JCheckBox();
         jButtonClose = new javax.swing.JButton();
+        jComboBoxInputEnding = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImage(getIconImage());
@@ -157,6 +160,13 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
+        jComboBoxInputEnding.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "CR", "NL", "CR & NL" }));
+        jComboBoxInputEnding.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxInputEndingActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -175,6 +185,8 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jComboBoxInputEnding, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jComboBoxBaudrate, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -185,18 +197,19 @@ public class terminalInterface extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxAutoscroll)
+                    .addComponent(jCheckBoxShowTime)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jCheckBoxAutoscroll)
+                        .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxInputEnding, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonReset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonClean)
                         .addComponent(jComboBoxBaudrate, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jCheckBoxShowTime)
-                        .addComponent(jButtonReset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonClean, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -215,8 +228,8 @@ public class terminalInterface extends javax.swing.JFrame {
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         String input_data = evt.getActionCommand();
+        input_data += input_ending;
         if ( evt.getActionCommand().length() != 0 && commPortManager.get_current_port() != commPortManager.undefinedPort ) {
-            input_data += "\r\n";
             commPortManager.writeData( input_data );
         }
         jTextField1.setText("");
@@ -275,6 +288,22 @@ public class terminalInterface extends javax.swing.JFrame {
         }
         this.setTitle( "" );
     }//GEN-LAST:event_jButtonCloseActionPerformed
+
+    private void jComboBoxInputEndingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxInputEndingActionPerformed
+        String selection = (String) jComboBoxInputEnding.getSelectedItem();
+        if ( selection == "None" ){
+            input_ending = "";
+        }
+        else if (selection == "CR" ) {
+            input_ending = "\r";
+        }
+        else if (selection == "NL" ) {
+            input_ending = "\n";
+        }
+        else {
+            input_ending = "\r\n";
+        }
+    }//GEN-LAST:event_jComboBoxInputEndingActionPerformed
 
     static private void set_com_ports_list() {
         ArrayList<String> ports_list = commPortManager.searchForPorts();
@@ -374,6 +403,7 @@ public class terminalInterface extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBoxShowTime;
     private javax.swing.JComboBox jComboBoxBaudrate;
     private static javax.swing.JComboBox jComboBoxCOM;
+    private javax.swing.JComboBox jComboBoxInputEnding;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTextArea jTextArea1;
