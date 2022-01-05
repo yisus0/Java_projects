@@ -30,11 +30,14 @@ import javax.swing.text.StyleContext;
 public class terminalInterface extends javax.swing.JFrame {
 
     static public String string_textarea = "";
-    boolean autoscroll = false;
+    static boolean autoscroll = false;
     static boolean show_time_enabled = false;
-    boolean dark_theme = false;
-    String input_ending = "\r\n";
-    String baud_rate = "--";
+    static boolean dark_theme = false;
+    static String input_ending = "\r\n";
+    static String input_ending_selection = "None";
+    static String baud_rate = "115200";
+    
+    static ConfigurationManager configurationManager = new ConfigurationManager();
     
     @Override
     public Image getIconImage() {
@@ -57,8 +60,8 @@ public class terminalInterface extends javax.swing.JFrame {
 
     public void Interface_setup(){
         jTextArea1.setEditable(false);
-        jComboBoxBaudrate.setSelectedItem("57600");
-        jComboBoxInputEnding.setSelectedItem("CR & NL");
+        jComboBoxBaudrate.setSelectedItem( baud_rate );
+        jComboBoxInputEnding.setSelectedItem( input_ending_selection );
         init_listener_to_close();
     }
     /**
@@ -263,7 +266,7 @@ public class terminalInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonResetActionPerformed
 
     private void jComboBoxBaudrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBaudrateActionPerformed
-        // TODO add your handling code here:
+        baud_rate = (String) jComboBoxBaudrate.getSelectedItem();
     }//GEN-LAST:event_jComboBoxBaudrateActionPerformed
 
     private void jCheckBoxAutoscrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxAutoscrollActionPerformed
@@ -304,14 +307,14 @@ public class terminalInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCloseActionPerformed
 
     private void jComboBoxInputEndingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxInputEndingActionPerformed
-        String selection = (String) jComboBoxInputEnding.getSelectedItem();
-        if ( selection == "None" ){
+        input_ending_selection = (String) jComboBoxInputEnding.getSelectedItem();
+        if ( input_ending_selection == "None" ){
             input_ending = "";
         }
-        else if (selection == "CR" ) {
+        else if (input_ending_selection == "CR" ) {
             input_ending = "\r";
         }
-        else if (selection == "NL" ) {
+        else if (input_ending_selection == "NL" ) {
             input_ending = "\n";
         }
         else {
@@ -389,6 +392,7 @@ public class terminalInterface extends javax.swing.JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 System.out.println("SALIMOSS");
+                save_config();
             }
         });
     }
@@ -430,6 +434,14 @@ public class terminalInterface extends javax.swing.JFrame {
     public void set_baud_rate() {
         
     }
+    
+    public void load_config() {
+        
+    }
+    
+    static public void save_config() {         
+        configurationManager.save_config((char)(autoscroll?'1':'0'), (char)(show_time_enabled?'1':'0'), (char)(dark_theme?'1':'0'), input_ending_selection, baud_rate);
+    }
 
     /**
      * @param args the command line arguments
@@ -461,7 +473,8 @@ public class terminalInterface extends javax.swing.JFrame {
         //</editor-fold>
         /*DefaultCaret caret_init = (DefaultCaret)jTextArea1.getCaret();
         caret_init.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);*/
-        System.out.println("HOLA");
+        System.out.println("START");
+
         terminalInterface test = new terminalInterface();
         test.Interface_setup();
         test.setVisible(true);
