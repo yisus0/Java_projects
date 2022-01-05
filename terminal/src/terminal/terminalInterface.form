@@ -46,7 +46,7 @@
                   <Component id="jCheckBoxAutoscroll" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jCheckBoxShowTime" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="193" max="32767" attributes="0"/>
+                  <EmptySpace pref="191" max="32767" attributes="0"/>
                   <Component id="jButtonClean" min="-2" pref="67" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   <Component id="jButtonReset" min="-2" pref="67" max="-2" attributes="0"/>
@@ -76,16 +76,18 @@
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" pref="575" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jCheckBoxAutoscroll" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jCheckBoxShowTime" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                           <Component id="jButtonClose" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                           <Component id="jComboBoxInputEnding" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
                           <Component id="jButtonReset" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                           <Component id="jButtonClean" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                           <Component id="jComboBoxBaudrate" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
                           <Component id="jComboBoxCOM" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jCheckBoxAutoscroll" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxShowTime" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
@@ -181,7 +183,6 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxAutoscroll">
           <Properties>
-            <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Autoscroll"/>
           </Properties>
           <Events>
@@ -198,7 +199,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxShowTime">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Show time"/>
+            <Property name="text" type="java.lang.String" value="Timestamp"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxShowTimeActionPerformed"/>

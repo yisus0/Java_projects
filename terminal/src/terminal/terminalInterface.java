@@ -11,6 +11,8 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -27,9 +29,12 @@ import javax.swing.text.StyleContext;
  */
 public class terminalInterface extends javax.swing.JFrame {
 
-    static public String string_textarea = ""; 
-    static boolean enable_show_time = false;
+    static public String string_textarea = "";
+    boolean autoscroll = false;
+    static boolean show_time_enabled = false;
+    boolean dark_theme = false;
     String input_ending = "\r\n";
+    String baud_rate = "--";
     
     @Override
     public Image getIconImage() {
@@ -39,7 +44,7 @@ public class terminalInterface extends javax.swing.JFrame {
      }
 
     static CommPortManager commPortManager = new CommPortManager((String data) -> {
-        if ( enable_show_time ) {
+        if ( show_time_enabled ) {
             string_textarea += java.time.LocalTime.now() + "  |  ";
         }
         string_textarea += data;
@@ -51,11 +56,12 @@ public class terminalInterface extends javax.swing.JFrame {
     }
 
     public void Interface_setup(){
-        //jTextArea1.setForeground(Color.WHITE);
-        jTextArea1.setBackground(Color.white);
+        jTextArea1.setForeground(Color.WHITE);
+        //jTextArea1.setBackground(Color.white);
         jTextArea1.setEditable(false);
         jComboBoxBaudrate.setSelectedItem("57600");
         jComboBoxInputEnding.setSelectedItem("CR & NL");
+        init_listener_to_close();
     }
     /**
      * Creates new form terminalInterface
@@ -131,7 +137,6 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
-        jCheckBoxAutoscroll.setSelected(true);
         jCheckBoxAutoscroll.setText("Autoscroll");
         jCheckBoxAutoscroll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,7 +151,7 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
-        jCheckBoxShowTime.setText("Show time");
+        jCheckBoxShowTime.setText("Timestamp");
         jCheckBoxShowTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxShowTimeActionPerformed(evt);
@@ -176,7 +181,7 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addComponent(jCheckBoxAutoscroll)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxShowTime)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 193, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 191, Short.MAX_VALUE)
                 .addComponent(jButtonClean, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -203,16 +208,17 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxAutoscroll)
-                    .addComponent(jCheckBoxShowTime)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jComboBoxInputEnding, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButtonClean, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jComboBoxBaudrate, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jCheckBoxAutoscroll)
+                        .addComponent(jCheckBoxShowTime)))
                 .addGap(6, 6, 6))
         );
 
@@ -252,13 +258,8 @@ public class terminalInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxBaudrateActionPerformed
 
     private void jCheckBoxAutoscrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxAutoscrollActionPerformed
-        DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
-        if ( jCheckBoxAutoscroll.isSelected() ) {
-            caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        }
-        else {
-            caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-        }
+        autoscroll = jCheckBoxAutoscroll.isSelected();
+        set_autoscroll();
     }//GEN-LAST:event_jCheckBoxAutoscrollActionPerformed
 
     private void jComboBoxCOMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCOMActionPerformed
@@ -277,10 +278,10 @@ public class terminalInterface extends javax.swing.JFrame {
 
     private void jCheckBoxShowTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxShowTimeActionPerformed
         if ( jCheckBoxShowTime.isSelected() ) {
-            enable_show_time = true;
+            show_time_enabled = true;
         }
         else {
-            enable_show_time = false;
+            show_time_enabled = false;
         }
     }//GEN-LAST:event_jCheckBoxShowTimeActionPerformed
 
@@ -330,8 +331,8 @@ public class terminalInterface extends javax.swing.JFrame {
             commPortManager.disconnect();
         }
         clean();
-        int baud_rate = Integer.parseInt(baud_rate_0);
-        commPortManager.set_com_parameters( port, baud_rate );
+        int baud = Integer.parseInt(baud_rate_0);
+        commPortManager.set_com_parameters( port, baud );
         if ( !commPortManager.connect() ) {
             this.setTitle( "ERROR" );
             jTextArea1.setText("ERROR. Failed to open " + port + "\r\n" );
@@ -348,14 +349,65 @@ public class terminalInterface extends javax.swing.JFrame {
         }
     }
 
-    static public void init_scroll() {
+    /*static public void init_scroll() {
         DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-    }
+    }*/
     
     public void clean(){
         string_textarea = "";
         jTextArea1.setText(string_textarea);
+    }
+    
+    /*Some piece of code*/
+    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+            System.out.println("CERRANDO!");
+            System.exit(0);
+    }
+    
+    public void init_listener_to_close() {
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                System.out.println("SALIMOSS");
+            }
+        });
+    }
+    
+    public void set_autoscroll() {
+        DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
+        if ( autoscroll ) {
+            caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        }
+        else {
+            caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+        }
+    }
+    
+    public void set_show_time() {
+        if ( show_time_enabled ) {
+            
+        }
+        else {
+            
+        }
+    }
+    
+    public void set_dark_theme() {
+        if ( dark_theme ) {
+            
+        }
+        else {
+            
+        }
+    }
+    
+    public void set_input_ending() {
+        
+    }
+    
+    public void set_baud_rate() {
+        
     }
 
     /**
@@ -392,7 +444,7 @@ public class terminalInterface extends javax.swing.JFrame {
         terminalInterface test = new terminalInterface();
         test.Interface_setup();
         test.setVisible(true);
-        init_scroll();
+        //init_scroll();
 
         set_com_ports_list();
         System.out.println("ADIOS");
