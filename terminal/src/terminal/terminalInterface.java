@@ -56,8 +56,6 @@ public class terminalInterface extends javax.swing.JFrame {
     }
 
     public void Interface_setup(){
-        jTextArea1.setForeground(Color.WHITE);
-        //jTextArea1.setBackground(Color.white);
         jTextArea1.setEditable(false);
         jComboBoxBaudrate.setSelectedItem("57600");
         jComboBoxInputEnding.setSelectedItem("CR & NL");
@@ -91,6 +89,7 @@ public class terminalInterface extends javax.swing.JFrame {
         jCheckBoxShowTime = new javax.swing.JCheckBox();
         jButtonClose = new javax.swing.JButton();
         jComboBoxInputEnding = new javax.swing.JComboBox();
+        jCheckBoxDark = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImage(getIconImage());
@@ -172,6 +171,13 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
+        jCheckBoxDark.setText("Dark");
+        jCheckBoxDark.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxDarkActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -181,7 +187,9 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addComponent(jCheckBoxAutoscroll)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxShowTime)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 191, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBoxDark)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
                 .addComponent(jButtonClean, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -218,7 +226,8 @@ public class terminalInterface extends javax.swing.JFrame {
                         .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jCheckBoxAutoscroll)
-                        .addComponent(jCheckBoxShowTime)))
+                        .addComponent(jCheckBoxShowTime)
+                        .addComponent(jCheckBoxDark)))
                 .addGap(6, 6, 6))
         );
 
@@ -310,6 +319,16 @@ public class terminalInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jComboBoxInputEndingActionPerformed
 
+    private void jCheckBoxDarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDarkActionPerformed
+        if ( jCheckBoxDark.isSelected() ) {
+            dark_theme = true;
+        }
+        else {
+            dark_theme = false;
+        }
+        set_dark_theme();
+    }//GEN-LAST:event_jCheckBoxDarkActionPerformed
+
     static private void set_com_ports_list() {
         ArrayList<String> ports_list = commPortManager.searchForPorts();
         String ports_array[] = null;
@@ -395,10 +414,12 @@ public class terminalInterface extends javax.swing.JFrame {
     
     public void set_dark_theme() {
         if ( dark_theme ) {
-            
+           jTextArea1.setForeground(Color.WHITE);
+           jTextArea1.setBackground(new Color(40,40,50));
         }
         else {
-            
+           jTextArea1.setForeground(Color.BLACK);
+           jTextArea1.setBackground(Color.WHITE);
         }
     }
     
@@ -456,6 +477,7 @@ public class terminalInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonReset;
     private javax.swing.JCheckBox jCheckBoxAutoscroll;
+    private javax.swing.JCheckBox jCheckBoxDark;
     private javax.swing.JCheckBox jCheckBoxShowTime;
     private javax.swing.JComboBox jComboBoxBaudrate;
     private static javax.swing.JComboBox jComboBoxCOM;

@@ -46,7 +46,9 @@
                   <Component id="jCheckBoxAutoscroll" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jCheckBoxShowTime" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="191" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jCheckBoxDark" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="142" max="32767" attributes="0"/>
                   <Component id="jButtonClean" min="-2" pref="67" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   <Component id="jButtonReset" min="-2" pref="67" max="-2" attributes="0"/>
@@ -88,6 +90,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jCheckBoxAutoscroll" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBoxShowTime" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxDark" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
@@ -226,6 +229,14 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxInputEndingActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="jCheckBoxDark">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Dark"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxDarkActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
