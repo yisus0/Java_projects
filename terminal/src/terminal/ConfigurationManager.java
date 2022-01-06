@@ -18,7 +18,7 @@ import java.io.FileNotFoundException;  // Import this class to handle errors
 public class ConfigurationManager {
 
     String file_name = "Jterminal.config";
-    String user_location = "AppData\\Local";
+    String user_location = "AppData\\Local\\Jterminal";
 
     private void check_directory_exists() {
         String user_directory = System.getProperty("user.home");
