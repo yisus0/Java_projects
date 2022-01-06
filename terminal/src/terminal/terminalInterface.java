@@ -274,9 +274,6 @@ public class terminalInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxAutoscrollActionPerformed
 
     private void jComboBoxCOMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCOMActionPerformed
-        /*System.out.println(jComboBoxCOM.getSelectedItem());
-        System.out.println(jComboBoxBaudrate.getSelectedItem());*/
-        
         start_stream( (String)jComboBoxCOM.getSelectedItem(), (String)jComboBoxBaudrate.getSelectedItem() );
         if ( commPortManager.get_current_port() != commPortManager.undefinedPort ) {
             jComboBoxCOM.setSelectedItem(commPortManager.get_current_port());
@@ -308,18 +305,6 @@ public class terminalInterface extends javax.swing.JFrame {
     private void jComboBoxInputEndingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxInputEndingActionPerformed
         input_ending_selection = (String) jComboBoxInputEnding.getSelectedItem();
         set_input_ending();
-        /*if ( input_ending_selection == "None" ){
-            input_ending = "";
-        }
-        else if (input_ending_selection == "CR" ) {
-            input_ending = "\r";
-        }
-        else if (input_ending_selection == "NL" ) {
-            input_ending = "\n";
-        }
-        else {
-            input_ending = "\r\n";
-        }*/
     }//GEN-LAST:event_jComboBoxInputEndingActionPerformed
 
     private void jCheckBoxDarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDarkActionPerformed
@@ -370,11 +355,6 @@ public class terminalInterface extends javax.swing.JFrame {
             System.out.println("Error de puerto");
         }
     }
-
-    /*static public void init_scroll() {
-        DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-    }*/
     
     public void clean(){
         string_textarea = "";
@@ -431,10 +411,6 @@ public class terminalInterface extends javax.swing.JFrame {
         else {
             input_ending = "\r\n";
         }
-    }
-    
-    public void set_baud_rate() {
-        
     }
     
     static public void load_config() {

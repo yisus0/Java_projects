@@ -18,9 +18,20 @@ import java.io.FileNotFoundException;  // Import this class to handle errors
 public class ConfigurationManager {
 
     String file_name = "Jterminal.config";
-    String user_location = "Desktop";
+    String user_location = "AppData\\Local";
+
+    private void check_directory_exists() {
+        String user_directory = System.getProperty("user.home");
+        String absolute_path = user_directory + File.separator + user_location + File.separator;
+        File directory = new File(absolute_path);
+
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+    }
 
     private FileWriter get_writer_file() {
+        check_directory_exists();
         FileWriter file = null;
         String user_directory = System.getProperty("user.home");
         String absolute_path = user_directory + File.separator + user_location + File.separator + file_name;
@@ -28,7 +39,7 @@ public class ConfigurationManager {
             file = new FileWriter( absolute_path );
         } 
         catch (IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println("get_writer_file: An error occurred.");
         }
         return file;
     }
@@ -45,7 +56,7 @@ public class ConfigurationManager {
             file.close();
         } 
         catch (IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println("save_config: An error occurred.");
         }
     }
     
@@ -70,7 +81,7 @@ public class ConfigurationManager {
             data_from_file.close();
         }
         catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("load_config: An error occurred.");
         }
         return result;
     }
