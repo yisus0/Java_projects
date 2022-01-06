@@ -63,8 +63,6 @@ public class CommPortManager implements SerialPortEventListener {
     public void set_com_parameters(String port, int baud_rate_0 ) {
         selectedPort = port;
         baud_rate = baud_rate_0;
-        System.out.println(port);
-        System.out.println(baud_rate_0);
     }
     
     public String get_current_port() {

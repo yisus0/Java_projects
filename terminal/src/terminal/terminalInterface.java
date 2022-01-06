@@ -97,7 +97,6 @@ public class terminalInterface extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImage(getIconImage());
 
-        jTextArea1.setBackground(new java.awt.Color(40, 40, 50));
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 12)); // NOI18N
         jTextArea1.setRows(5);
@@ -308,7 +307,8 @@ public class terminalInterface extends javax.swing.JFrame {
 
     private void jComboBoxInputEndingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxInputEndingActionPerformed
         input_ending_selection = (String) jComboBoxInputEnding.getSelectedItem();
-        if ( input_ending_selection == "None" ){
+        set_input_ending();
+        /*if ( input_ending_selection == "None" ){
             input_ending = "";
         }
         else if (input_ending_selection == "CR" ) {
@@ -319,7 +319,7 @@ public class terminalInterface extends javax.swing.JFrame {
         }
         else {
             input_ending = "\r\n";
-        }
+        }*/
     }//GEN-LAST:event_jComboBoxInputEndingActionPerformed
 
     private void jCheckBoxDarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDarkActionPerformed
@@ -397,7 +397,7 @@ public class terminalInterface extends javax.swing.JFrame {
         });
     }
     
-    public void set_autoscroll() {
+    static public void set_autoscroll() {
         DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
         if ( autoscroll ) {
             caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -406,17 +406,8 @@ public class terminalInterface extends javax.swing.JFrame {
             caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         }
     }
-    
-    public void set_show_time() {
-        if ( show_time_enabled ) {
-            
-        }
-        else {
-            
-        }
-    }
-    
-    public void set_dark_theme() {
+
+    static public void set_dark_theme() {
         if ( dark_theme ) {
            jTextArea1.setForeground(Color.WHITE);
            jTextArea1.setBackground(new Color(40,40,50));
@@ -427,16 +418,49 @@ public class terminalInterface extends javax.swing.JFrame {
         }
     }
     
-    public void set_input_ending() {
-        
+    static public void set_input_ending() {
+        if ( input_ending_selection == "None" ){
+            input_ending = "";
+        }
+        else if (input_ending_selection == "CR" ) {
+            input_ending = "\r";
+        }
+        else if (input_ending_selection == "NL" ) {
+            input_ending = "\n";
+        }
+        else {
+            input_ending = "\r\n";
+        }
     }
     
     public void set_baud_rate() {
         
     }
     
-    public void load_config() {
+    static public void load_config() {
+        String result = configurationManager.load_config();
+        String [] result_array = result.split( "," );
+        if (result_array.length != 5 ) {
+            return;
+        }
+        autoscroll             = ( result_array[0].equals( "1" ) )?true:false;
+        show_time_enabled      = ( result_array[1].equals( "1" ) )?true:false;
+        dark_theme             = ( result_array[2].equals( "1" ) )?true:false;
+        input_ending_selection = result_array[3];
+        baud_rate              = result_array[4];
         
+        jCheckBoxAutoscroll.setSelected( autoscroll );
+        set_autoscroll();
+
+        jCheckBoxShowTime.setSelected( show_time_enabled );
+
+        jCheckBoxDark.setSelected( dark_theme );
+        set_dark_theme();
+
+        jComboBoxInputEnding.setSelectedItem( input_ending_selection );
+        set_input_ending();
+
+        jComboBoxBaudrate.setSelectedItem( baud_rate );
     }
     
     static public void save_config() {         
@@ -474,14 +498,11 @@ public class terminalInterface extends javax.swing.JFrame {
         /*DefaultCaret caret_init = (DefaultCaret)jTextArea1.getCaret();
         caret_init.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);*/
         System.out.println("START");
-
         terminalInterface test = new terminalInterface();
         test.Interface_setup();
         test.setVisible(true);
-        //init_scroll();
-
+        load_config();
         set_com_ports_list();
-        System.out.println("ADIOS");
     }
 
 
@@ -489,12 +510,12 @@ public class terminalInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButtonClean;
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonReset;
-    private javax.swing.JCheckBox jCheckBoxAutoscroll;
-    private javax.swing.JCheckBox jCheckBoxDark;
-    private javax.swing.JCheckBox jCheckBoxShowTime;
-    private javax.swing.JComboBox jComboBoxBaudrate;
+    private static javax.swing.JCheckBox jCheckBoxAutoscroll;
+    private static javax.swing.JCheckBox jCheckBoxDark;
+    private static javax.swing.JCheckBox jCheckBoxShowTime;
+    private static javax.swing.JComboBox jComboBoxBaudrate;
     private static javax.swing.JComboBox jComboBoxCOM;
-    private javax.swing.JComboBox jComboBoxInputEnding;
+    private static javax.swing.JComboBox jComboBoxInputEnding;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTextArea jTextArea1;
