@@ -44,9 +44,9 @@ public class ConfigurationManager {
         return file;
     }
     
-    public void save_config( char autoscroll, char show_time_enabled, char dark_theme, String input_ending, String baud_rate) {
+    public void save_config( char show_time_enabled, char dark_theme, String input_ending, String baud_rate) {
         FileWriter file = get_writer_file();
-        String data = autoscroll + "," + show_time_enabled + "," + dark_theme + "," + input_ending + "," + baud_rate;
+        String data = show_time_enabled + "," + dark_theme + "," + input_ending + "," + baud_rate;
 
         if ( file == null ) {
             return;

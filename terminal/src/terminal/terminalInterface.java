@@ -32,7 +32,7 @@ import javax.swing.text.StyleContext;
  */
 public class terminalInterface extends javax.swing.JFrame {
 
-    static boolean autoscroll = false;
+    static boolean autoscroll = true;
     static boolean show_time_enabled = false;
     static boolean dark_theme = false;
     static String input_ending = "\r\n";
@@ -142,6 +142,7 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
+        jCheckBoxAutoscroll.setSelected(true);
         jCheckBoxAutoscroll.setText("Autoscroll");
         jCheckBoxAutoscroll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -428,19 +429,17 @@ public class terminalInterface extends javax.swing.JFrame {
     }
     
     static public void load_config() {
+        set_autoscroll();
         String result = configurationManager.load_config();
         String [] result_array = result.split( "," );
-        if (result_array.length != 5 ) {
+        if (result_array.length != 4 ) {
             return;
         }
-        autoscroll             = ( result_array[0].equals( "1" ) )?true:false;
-        show_time_enabled      = ( result_array[1].equals( "1" ) )?true:false;
-        dark_theme             = ( result_array[2].equals( "1" ) )?true:false;
-        input_ending_selection = result_array[3];
-        baud_rate              = result_array[4];
-        
-        jCheckBoxAutoscroll.setSelected( autoscroll );
-        set_autoscroll();
+
+        show_time_enabled      = ( result_array[0].equals( "1" ) )?true:false;
+        dark_theme             = ( result_array[1].equals( "1" ) )?true:false;
+        input_ending_selection = result_array[2];
+        baud_rate              = result_array[3];
 
         jCheckBoxShowTime.setSelected( show_time_enabled );
 
@@ -454,7 +453,7 @@ public class terminalInterface extends javax.swing.JFrame {
     }
     
     static public void save_config() {         
-        configurationManager.save_config((char)(autoscroll?'1':'0'), (char)(show_time_enabled?'1':'0'), (char)(dark_theme?'1':'0'), input_ending_selection, baud_rate);
+        configurationManager.save_config( (char)(show_time_enabled?'1':'0'), (char)(dark_theme?'1':'0'), input_ending_selection, baud_rate);
     }
 
     /**
@@ -487,7 +486,7 @@ public class terminalInterface extends javax.swing.JFrame {
         //</editor-fold>
         /*DefaultCaret caret_init = (DefaultCaret)jTextArea1.getCaret();
         caret_init.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);*/
-        System.out.println("START");
+        System.out.println( "START" );
         terminalInterface test = new terminalInterface();
         test.Interface_setup();
         test.setVisible(true);

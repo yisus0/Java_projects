@@ -106,19 +106,19 @@ public class CommPortManager implements SerialPortEventListener {
             
             //logging
             logText = selectedPort + " opened successfully.";
-            System.out.println(logText + "n");
+            System.out.println( logText );
             return true;
         }
         catch (PortInUseException e)
         {
             logText = selectedPort + " is in use. (" + e.toString() + ")";
-            System.out.println(logText + "n");
+            System.out.println( logText );
             return false;
         }
         catch (Exception e)
         {
             logText = "Failed to open " + selectedPort + "(" + e.toString() + ")";
-            System.out.println(logText + "n");
+            System.out.println( logText );
             return false;
         }
     }
@@ -141,7 +141,7 @@ public class CommPortManager implements SerialPortEventListener {
         }
         catch (IOException e) {
             logText = "I/O Streams failed to open. (" + e.toString() + ")";
-            System.out.println(logText + "n");
+            System.out.println( logText );
             return successful;
         }
     }
@@ -159,7 +159,7 @@ public class CommPortManager implements SerialPortEventListener {
         catch (TooManyListenersException e)
         {
             logText = "Too many listeners. (" + e.toString() + ")";
-            System.out.println(logText + "n");
+            System.out.println( logText );
         }
         try {
             serialPort.setSerialPortParams(baud_rate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,SerialPort.PARITY_NONE);
@@ -181,7 +181,6 @@ public class CommPortManager implements SerialPortEventListener {
 
                     if (singleData == NEW_LINE_ASCII || singleData > 128) {
                         callback.callback(string_textarea);
-                        //System.out.print(string_textarea);
                         string_textarea = "";
                     }
                 }
@@ -189,7 +188,7 @@ public class CommPortManager implements SerialPortEventListener {
             catch (Exception e)
             {
                 logText = "Failed to read data. (" + e.toString() + ")";
-                System.out.println(logText + "n");
+                System.out.println( logText );
             }
         }
     }
@@ -206,7 +205,7 @@ public class CommPortManager implements SerialPortEventListener {
         catch (Exception e)
         {
             logText = "Failed to write data. (" + e.toString() + ")";
-            System.out.println(logText + "n");
+            System.out.println( logText );
         }
     }
 
@@ -222,13 +221,13 @@ public class CommPortManager implements SerialPortEventListener {
             output.close();
             currentPort = undefinedPort;
             logText = "Disconnected.";
-            System.out.println(logText + "n");
+            System.out.println( logText );
         }
         catch (Exception e)
         {
             logText = "Failed to close " + serialPort.getName()
                               + "(" + e.toString() + ")";
-            System.out.println(logText + "n");
+            System.out.println( logText );
         }
     }
     
