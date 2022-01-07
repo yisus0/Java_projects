@@ -8,6 +8,9 @@ package terminal;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -55,7 +58,6 @@ public class terminalInterface extends javax.swing.JFrame {
     });
     
     static public void setTextAreaText ( String string_textarea ) {
-        //jTextArea1.setText(string_textarea);
         jTextArea1.append( string_textarea );
     }
 
@@ -64,6 +66,7 @@ public class terminalInterface extends javax.swing.JFrame {
         jComboBoxBaudrate.setSelectedItem( baud_rate );
         jComboBoxInputEnding.setSelectedItem( input_ending_selection );
         init_listener_to_close();
+        init_listener_jtextaerea();
     }
     /**
      * Creates new form terminalInterface
@@ -371,6 +374,18 @@ public class terminalInterface extends javax.swing.JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 save_config();
+            }
+        });
+    }
+
+    public void init_listener_jtextaerea() {
+        jTextArea1.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    autoscroll = false;
+                    jCheckBoxAutoscroll.setSelected( autoscroll );
+                    set_autoscroll();
+                }
             }
         });
     }
