@@ -29,7 +29,6 @@ import javax.swing.text.StyleContext;
  */
 public class terminalInterface extends javax.swing.JFrame {
 
-    static public String string_textarea = "";
     static boolean autoscroll = false;
     static boolean show_time_enabled = false;
     static boolean dark_theme = false;
@@ -47,15 +46,17 @@ public class terminalInterface extends javax.swing.JFrame {
      }
 
     static CommPortManager commPortManager = new CommPortManager((String data) -> {
+        String string_textarea = "";
         if ( show_time_enabled ) {
             string_textarea += java.time.LocalTime.now() + "  |  ";
         }
         string_textarea += data;
-        setTextAreaText();
+        setTextAreaText( string_textarea );
     });
     
-    static public void setTextAreaText () {
-        jTextArea1.setText(string_textarea);
+    static public void setTextAreaText ( String string_textarea ) {
+        //jTextArea1.setText(string_textarea);
+        jTextArea1.append( string_textarea );
     }
 
     public void Interface_setup(){
@@ -357,8 +358,7 @@ public class terminalInterface extends javax.swing.JFrame {
     }
     
     public void clean(){
-        string_textarea = "";
-        jTextArea1.setText(string_textarea);
+        jTextArea1.setText( "" );
     }
     
     /*Some piece of code*/
@@ -379,6 +379,7 @@ public class terminalInterface extends javax.swing.JFrame {
         DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
         if ( autoscroll ) {
             caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+            jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
         }
         else {
             caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
