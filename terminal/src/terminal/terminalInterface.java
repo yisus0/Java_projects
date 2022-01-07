@@ -352,7 +352,7 @@ public class terminalInterface extends javax.swing.JFrame {
             this.setTitle( port );
         }
         else {
-            System.out.println("Error de puerto");
+            System.out.println( "Port error" );
         }
     }
     
@@ -363,7 +363,6 @@ public class terminalInterface extends javax.swing.JFrame {
     
     /*Some piece of code*/
     public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-            System.out.println("CERRANDO!");
             System.exit(0);
     }
     
@@ -371,7 +370,6 @@ public class terminalInterface extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                System.out.println("SALIMOSS");
                 save_config();
             }
         });
