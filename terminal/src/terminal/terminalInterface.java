@@ -382,11 +382,14 @@ public class terminalInterface extends javax.swing.JFrame {
     public void init_listener_jtextaerea() {
         jTextArea1.addMouseListener(new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
+                if ( e.getButton() == MouseEvent.BUTTON1 ) {
                     autoscroll = false;
-                    jCheckBoxAutoscroll.setSelected( autoscroll );
-                    set_autoscroll();
                 }
+                if ( e.getButton() == MouseEvent.BUTTON3 ) {
+                    autoscroll = true;
+                }
+                jCheckBoxAutoscroll.setSelected( autoscroll );
+                set_autoscroll();
             }
         });
     }
