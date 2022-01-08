@@ -12,6 +12,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
@@ -21,10 +23,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 
 /**
  *
@@ -58,11 +62,17 @@ public class terminalInterface extends javax.swing.JFrame {
     });
     
     static public void setTextAreaText ( String string_textarea ) {
-        jTextArea1.append( string_textarea );
+        StyledDocument doc = jTextPane1.getStyledDocument();
+        try {
+            doc.insertString( doc.getLength(), string_textarea, null );
+            //jTextPane1.append( string_textarea );
+        } catch (BadLocationException ex) {
+            Logger.getLogger(terminalInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void Interface_setup(){
-        jTextArea1.setEditable(false);
+        jTextPane1.setEditable(false);
         jComboBoxBaudrate.setSelectedItem( baud_rate );
         jComboBoxInputEnding.setSelectedItem( input_ending_selection );
         init_listener_to_close();
@@ -85,8 +95,6 @@ public class terminalInterface extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jTextField1 = new javax.swing.JTextField();
         jButtonReset = new javax.swing.JButton();
         jComboBoxBaudrate = new javax.swing.JComboBox();
@@ -97,14 +105,11 @@ public class terminalInterface extends javax.swing.JFrame {
         jButtonClose = new javax.swing.JButton();
         jComboBoxInputEnding = new javax.swing.JComboBox();
         jCheckBoxDark = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImage(getIconImage());
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 12)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)));
@@ -185,6 +190,9 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
+        jTextPane1.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 12)); // NOI18N
+        jScrollPane1.setViewportView(jTextPane1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -209,19 +217,19 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jComboBoxCOM, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(4, 4, 4)
                 .addComponent(jTextField1)
                 .addGap(4, 4, 4))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -347,7 +355,7 @@ public class terminalInterface extends javax.swing.JFrame {
         commPortManager.set_com_parameters( port, baud );
         if ( !commPortManager.connect() ) {
             this.setTitle( "ERROR" );
-            jTextArea1.setText("ERROR. Failed to open " + port + "\r\n" );
+            jTextPane1.setText("ERROR. Failed to open " + port + "\r\n" );
             jComboBoxCOM.setSelectedItem("--");
             return;
         }
@@ -362,7 +370,7 @@ public class terminalInterface extends javax.swing.JFrame {
     }
     
     public void clean(){
-        jTextArea1.setText( "" );
+        jTextPane1.setText( "" );
     }
     
     /*Some piece of code*/
@@ -380,7 +388,7 @@ public class terminalInterface extends javax.swing.JFrame {
     }
 
     public void init_listener_jtextaerea() {
-        jTextArea1.addMouseListener(new MouseAdapter() {
+        jTextPane1.addMouseListener(new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
                 if ( e.getButton() == MouseEvent.BUTTON1 ) {
                     autoscroll = false;
@@ -395,10 +403,10 @@ public class terminalInterface extends javax.swing.JFrame {
     }
     
     static public void set_autoscroll() {
-        DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
+        DefaultCaret caret = (DefaultCaret)jTextPane1.getCaret();
         if ( autoscroll ) {
             caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-            jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
+            jTextPane1.setCaretPosition(jTextPane1.getDocument().getLength());
         }
         else {
             caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
@@ -407,12 +415,12 @@ public class terminalInterface extends javax.swing.JFrame {
 
     static public void set_dark_theme() {
         if ( dark_theme ) {
-           jTextArea1.setForeground(Color.WHITE);
-           jTextArea1.setBackground(new Color(40,40,50));
+           jTextPane1.setForeground(Color.WHITE);
+           jTextPane1.setBackground(new Color(40,40,50));
         }
         else {
-           jTextArea1.setForeground(Color.BLACK);
-           jTextArea1.setBackground(Color.WHITE);
+           jTextPane1.setForeground(Color.BLACK);
+           jTextPane1.setBackground(Color.WHITE);
         }
     }
     
@@ -510,8 +518,8 @@ public class terminalInterface extends javax.swing.JFrame {
     private static javax.swing.JComboBox jComboBoxInputEnding;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private static javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
+    private static javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
 }
 
