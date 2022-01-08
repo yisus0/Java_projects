@@ -190,7 +190,7 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
-        jTextPane1.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 12)); // NOI18N
+        jTextPane1.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 12)); // NOI18N
         jScrollPane1.setViewportView(jTextPane1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
