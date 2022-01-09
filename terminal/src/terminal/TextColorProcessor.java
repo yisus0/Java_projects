@@ -21,9 +21,10 @@ public class TextColorProcessor {
     static Color ok = new Color(40,255,40);
     static Color error = new Color(255,80,80);
     static Color warning = new Color(255,200,40);
+    static Color debug = new Color(50,255,255);
 
-    static String[] words = { "OK", "ERROR", "CONNECTING", "CONNECTED", "CLOSED" }; 
-    static Color[] colors = { ok, error, warning, ok, error };
+    static String[] words = { "OK", "ERROR", "CONNECTING", "CONNECTED", "CLOSED", "hive" };
+    static Color[] colors = { ok, error, warning, ok, error, debug };
             
     public int get_match_word_index (String string ) {
         for ( int i = 0; i < words.length; i++ ) {
