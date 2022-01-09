@@ -40,6 +40,7 @@ public class terminalInterface extends javax.swing.JFrame {
     static boolean autoscroll = true;
     static boolean show_time_enabled = false;
     static boolean dark_theme = false;
+    static boolean colors = false;
     static String input_ending = "\r\n";
     static String input_ending_selection = "None";
     static String baud_rate = "115200";
@@ -67,7 +68,7 @@ public class terminalInterface extends javax.swing.JFrame {
         Style style = null;
         int index = textColorProcessor.get_match_word_index( string_textarea );
      
-        if ( index >= 0 ) {
+        if ( index >= 0 && colors ) {
             setTextAreaText( textColorProcessor.get_init_substring( string_textarea, index ), null );
             style = textColorProcessor.style_match_substring( index );
             setTextAreaText( textColorProcessor.get_match_substring( string_textarea, index ), style );
@@ -123,6 +124,7 @@ public class terminalInterface extends javax.swing.JFrame {
         jCheckBoxDark = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
+        jCheckBoxColors = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImage(getIconImage());
@@ -209,6 +211,13 @@ public class terminalInterface extends javax.swing.JFrame {
         jTextPane1.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 12)); // NOI18N
         jScrollPane1.setViewportView(jTextPane1);
 
+        jCheckBoxColors.setText("Color");
+        jCheckBoxColors.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxColorsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -220,7 +229,9 @@ public class terminalInterface extends javax.swing.JFrame {
                 .addComponent(jCheckBoxShowTime)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxDark)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBoxColors)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
                 .addComponent(jButtonClean, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -258,7 +269,8 @@ public class terminalInterface extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jCheckBoxAutoscroll)
                         .addComponent(jCheckBoxShowTime)
-                        .addComponent(jCheckBoxDark)))
+                        .addComponent(jCheckBoxDark)
+                        .addComponent(jCheckBoxColors)))
                 .addGap(6, 6, 6))
         );
 
@@ -345,6 +357,15 @@ public class terminalInterface extends javax.swing.JFrame {
         }
         set_dark_theme();
     }//GEN-LAST:event_jCheckBoxDarkActionPerformed
+
+    private void jCheckBoxColorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxColorsActionPerformed
+        if ( jCheckBoxColors.isSelected() ) {
+            colors = true;
+        }
+        else {
+            colors = false;
+        }
+    }//GEN-LAST:event_jCheckBoxColorsActionPerformed
 
     static private void set_com_ports_list() {
         ArrayList<String> ports_list = commPortManager.searchForPorts();
@@ -459,19 +480,22 @@ public class terminalInterface extends javax.swing.JFrame {
         set_autoscroll();
         String result = configurationManager.load_config();
         String [] result_array = result.split( "," );
-        if (result_array.length != 4 ) {
+        if (result_array.length != 5 ) {
             return;
         }
 
         show_time_enabled      = ( result_array[0].equals( "1" ) )?true:false;
         dark_theme             = ( result_array[1].equals( "1" ) )?true:false;
-        input_ending_selection = result_array[2];
-        baud_rate              = result_array[3];
+        colors                 = ( result_array[2].equals( "1" ) )?true:false;
+        input_ending_selection = result_array[3];
+        baud_rate              = result_array[4];
 
         jCheckBoxShowTime.setSelected( show_time_enabled );
 
         jCheckBoxDark.setSelected( dark_theme );
         set_dark_theme();
+        
+        jCheckBoxColors.setSelected( colors );
 
         jComboBoxInputEnding.setSelectedItem( input_ending_selection );
         set_input_ending();
@@ -480,7 +504,7 @@ public class terminalInterface extends javax.swing.JFrame {
     }
     
     static public void save_config() {         
-        configurationManager.save_config( (char)(show_time_enabled?'1':'0'), (char)(dark_theme?'1':'0'), input_ending_selection, baud_rate);
+        configurationManager.save_config( (char)(show_time_enabled?'1':'0'), (char)(dark_theme?'1':'0'), (char)(colors?'1':'0'), input_ending_selection, baud_rate);
     }
 
     /**
@@ -527,6 +551,7 @@ public class terminalInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonReset;
     private static javax.swing.JCheckBox jCheckBoxAutoscroll;
+    private static javax.swing.JCheckBox jCheckBoxColors;
     private static javax.swing.JCheckBox jCheckBoxDark;
     private static javax.swing.JCheckBox jCheckBoxShowTime;
     private static javax.swing.JComboBox jComboBoxBaudrate;
