@@ -26,6 +26,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
@@ -44,6 +45,7 @@ public class terminalInterface extends javax.swing.JFrame {
     static String baud_rate = "115200";
     
     static ConfigurationManager configurationManager = new ConfigurationManager();
+    static TextColorProcessor textColorProcessor = new TextColorProcessor();
     
     @Override
     public Image getIconImage() {
@@ -58,14 +60,28 @@ public class terminalInterface extends javax.swing.JFrame {
             string_textarea += java.time.LocalTime.now() + "  |  ";
         }
         string_textarea += data;
-        setTextAreaText( string_textarea );
+        process_style( string_textarea );
     });
     
-    static public void setTextAreaText ( String string_textarea ) {
+    static public void process_style ( String string_textarea ) {
+        Style style = null;
+        int index = textColorProcessor.get_match_word_index( string_textarea );
+     
+        if ( index >= 0 ) {
+            setTextAreaText( textColorProcessor.get_init_substring( string_textarea, index ), null );
+            style = textColorProcessor.style_match_substring( index );
+            setTextAreaText( textColorProcessor.get_match_substring( string_textarea, index ), style );
+            setTextAreaText( textColorProcessor.get_end_substring( string_textarea, index ), null );
+        }
+        else {
+            setTextAreaText( string_textarea, style );
+        }
+    }
+    
+    static public void setTextAreaText ( String string_textarea, Style style ) {
         StyledDocument doc = jTextPane1.getStyledDocument();
         try {
-            doc.insertString( doc.getLength(), string_textarea, null );
-            //jTextPane1.append( string_textarea );
+            doc.insertString( doc.getLength(), string_textarea, style );
         } catch (BadLocationException ex) {
             Logger.getLogger(terminalInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
