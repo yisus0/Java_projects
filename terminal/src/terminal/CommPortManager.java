@@ -102,7 +102,8 @@ public class CommPortManager implements SerialPortDataListener {
         serialPort.setParity(SerialPort.NO_PARITY);
         serialPort.setNumStopBits(SerialPort.ONE_STOP_BIT);
         serialPort.setNumDataBits(8);
-        serialPort.setComPortTimeouts( SerialPort.TIMEOUT_READ_BLOCKING, TIMEOUT, TIMEOUT );
+        serialPort.setRTS();
+        serialPort.setComPortTimeouts( SerialPort.TIMEOUT_READ_BLOCKING, TIMEOUT, 0 );
     }
 
     public int getListeningEvents() {
