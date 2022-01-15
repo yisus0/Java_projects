@@ -14,14 +14,15 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortDataListener;
 import java.util.Set;
 import java.util.TooManyListenersException;
-import java.util.TreeSet;
+
 /**
  *
  * @author JPV
  */
-public class CommPortManager {
+public class CommPortManager implements SerialPortDataListener {
 
     //private final CommPortCallback callback;
     //for containing the ports that will be found
@@ -90,6 +91,7 @@ public class CommPortManager {
         serialPort.setParity(SerialPort.NO_PARITY);
         serialPort.setNumStopBits(SerialPort.ONE_STOP_BIT);
         serialPort.setNumDataBits(8);
+        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, TIMEOUT, TIMEOUT );
         
         if ( serialPort.openPort() ) {
             System.out.println( "Opened successfully." );
@@ -123,22 +125,15 @@ public class CommPortManager {
     }
      
     public void initListener() {
-        try
-        {
-            serialPort.addDataListener(this);
-            //serialPort.notifyOnDataAvailable( true );
-        }
-        catch (TooManyListenersException e)
-        {
-            logText = "Too many listeners. (" + e.toString() + ")";
-            System.out.println( logText );
-        }
-
+        serialPort.addDataListener(this);
     }
 
-    //what happens when data is received
-    //pre style="font-size: 11px;": serial event is triggered
-    //post: processing on the data it reads
+    @Override
+    public int getListeningEvents() {
+        return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
+    }
+
+    @Override
     public void serialEvent(com.fazecast.jSerialComm.SerialPortEvent evt) {
         if ( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE ) {
             try
@@ -160,6 +155,7 @@ public class CommPortManager {
                 System.out.println( logText );
             }
         }
+        
     }
 
      
@@ -183,4 +179,5 @@ public class CommPortManager {
             System.out.println( "Failed to close " );
         }
     }
+
 }

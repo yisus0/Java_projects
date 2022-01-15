@@ -384,7 +384,7 @@ public class terminalInterface extends javax.swing.JFrame {
  
         System.out.println("OKEY");
         boolean successful = commPortManagerr.initIOStream();
-        //commPortManagerr.initListener();
+        commPortManagerr.initListener();
         /*if ( successful ) {
             commPortManager.initListener();
             this.setTitle( port );
