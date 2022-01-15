@@ -87,11 +87,6 @@ public class CommPortManager implements SerialPortDataListener {
     
     public boolean connect() {
         serialPort = SerialPort.getCommPort( selectedPort );
-        serialPort.setBaudRate( baud_rate );
-        serialPort.setParity(SerialPort.NO_PARITY);
-        serialPort.setNumStopBits(SerialPort.ONE_STOP_BIT);
-        serialPort.setNumDataBits(8);
-        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, TIMEOUT, TIMEOUT );
         
         if ( serialPort.openPort() ) {
             System.out.println( "Opened successfully." );
@@ -126,6 +121,11 @@ public class CommPortManager implements SerialPortDataListener {
      
     public void initListener() {
         serialPort.addDataListener(this);
+        serialPort.setBaudRate( baud_rate );
+        serialPort.setParity(SerialPort.NO_PARITY);
+        serialPort.setNumStopBits(SerialPort.ONE_STOP_BIT);
+        serialPort.setNumDataBits(8);
+        serialPort.setComPortTimeouts( SerialPort.TIMEOUT_READ_BLOCKING, TIMEOUT, TIMEOUT );
     }
 
     @Override
@@ -144,7 +144,7 @@ public class CommPortManager implements SerialPortDataListener {
 
                     if (singleData == NEW_LINE_ASCII || singleData > 128) {
                         //callback.callback(string_textarea);
-                        System.out.println( string_textarea );
+                        System.out.print( string_textarea );
                         string_textarea = "";
                     }
                 }
@@ -157,6 +157,17 @@ public class CommPortManager implements SerialPortDataListener {
         }
         
     }
+    
+    public void writeData( String data ) {
+        byte[] data_array = data.getBytes();
+        try {
+            output.write( data_array );
+            output.flush();
+        }
+        catch (Exception e) {
+            System.out.println( "Failed to write data." );
+        }
+    }
 
      
 
@@ -168,7 +179,7 @@ public class CommPortManager implements SerialPortDataListener {
     public void disconnect() {
         disconnection_demand = true;
         try {
-            //serialPort.removeEventListener();
+            serialPort.removeDataListener();
             serialPort.closePort();
             input.close();
             output.close();
@@ -179,5 +190,9 @@ public class CommPortManager implements SerialPortDataListener {
             System.out.println( "Failed to close " );
         }
     }
+    
+    /*public CommPortManager( CommPortCallback callback ) {
+        this.callback = callback;
+    }*/
 
 }

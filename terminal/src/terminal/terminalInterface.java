@@ -258,7 +258,7 @@ public class terminalInterface extends javax.swing.JFrame {
         String input_data = evt.getActionCommand();
         input_data += input_ending;
         if ( evt.getActionCommand().length() != 0 && commPortManagerr.get_current_port() != commPortManagerr.undefinedPort ) {
-            //commPortManager.writeData( input_data );
+            commPortManagerr.writeData( input_data );
         }
         jTextField1.setText("");
     }//GEN-LAST:event_jTextField1ActionPerformed
