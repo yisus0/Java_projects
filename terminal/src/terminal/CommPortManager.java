@@ -24,14 +24,8 @@ import java.util.TooManyListenersException;
  */
 public class CommPortManager implements SerialPortDataListener {
 
-    //private final CommPortCallback callback;
-    //for containing the ports that will be found
-    private Enumeration ports = null;
-    //map the port names to CommPortIdentifiers
-    private HashMap portMap = new HashMap();
-
-    //this is the object that contains the opened port
-    private SerialPort selectedPortIdentifier = null;
+    private final CommPortCallback callback;
+    //private SerialPort selectedPortIdentifier = null;
     private SerialPort serialPort = null;
 
     //input and output streams for sending and receiving data
@@ -41,7 +35,7 @@ public class CommPortManager implements SerialPortDataListener {
     //just a boolean flag that i use for enabling
     //and disabling buttons depending on whether the program
     //is connected to a serial port or not
-    private boolean bConnected = false;
+    //private boolean bConnected = false;
 
     //the timeout value for connecting with the port
     final static int TIMEOUT = 2000;
@@ -53,7 +47,6 @@ public class CommPortManager implements SerialPortDataListener {
 
     //a string for recording what goes on in the program
     //this string is written to the GUI
-    String logText = "";
     String string_textarea = "";
     
     public String undefinedPort = "--";
@@ -79,7 +72,6 @@ public class CommPortManager implements SerialPortDataListener {
         if ( port_array != null && port_array.length > 0 ) {
             for ( SerialPort port : port_array ) {
                 ports_list.add( port.getSystemPortName() );
-                System.out.println( port.getSystemPortName() );
             }
         }
         return (ArrayList<String>) ports_list;
@@ -98,25 +90,10 @@ public class CommPortManager implements SerialPortDataListener {
         return false;
     }
     
-     public boolean initIOStream() {
-        boolean successful = false;
+     public void initIOStream() {
         input = serialPort.getInputStream();
         output = serialPort.getOutputStream();
         currentPort = selectedPort;
-        successful = true;
-        return successful;
-        /*try {
-            //
-            input = serialPort.getInputStream();
-            output = serialPort.getOutputStream();
-            currentPort = selectedPort;
-            successful = true;
-            return successful;
-        }
-        catch (IOException e) {
-            System.out.println( "I/O Streams failed to open. (" + e.toString() );
-            return successful;
-        }*/
     }
      
     public void initListener() {
@@ -128,12 +105,10 @@ public class CommPortManager implements SerialPortDataListener {
         serialPort.setComPortTimeouts( SerialPort.TIMEOUT_READ_BLOCKING, TIMEOUT, TIMEOUT );
     }
 
-    @Override
     public int getListeningEvents() {
         return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
     }
 
-    @Override
     public void serialEvent(com.fazecast.jSerialComm.SerialPortEvent evt) {
         if ( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE ) {
             try
@@ -143,16 +118,13 @@ public class CommPortManager implements SerialPortDataListener {
                     string_textarea += (char)singleData;
 
                     if (singleData == NEW_LINE_ASCII || singleData > 128) {
-                        //callback.callback(string_textarea);
-                        System.out.print( string_textarea );
+                        callback.callback(string_textarea);
                         string_textarea = "";
                     }
                 }
             }
-            catch (Exception e)
-            {
-                logText = "Failed to read data. (" + e.toString() + ")";
-                System.out.println( logText );
+            catch (Exception e) {
+                System.out.println( "Failed to read data" );
             }
         }
         
@@ -169,13 +141,6 @@ public class CommPortManager implements SerialPortDataListener {
         }
     }
 
-     
-
-
-
-
-
-    
     public void disconnect() {
         disconnection_demand = true;
         try {
@@ -184,6 +149,7 @@ public class CommPortManager implements SerialPortDataListener {
             input.close();
             output.close();
             currentPort = undefinedPort;
+            disconnection_demand = false;
             System.out.println( "Disconnected" );
         }
         catch (Exception e) {
@@ -191,8 +157,8 @@ public class CommPortManager implements SerialPortDataListener {
         }
     }
     
-    /*public CommPortManager( CommPortCallback callback ) {
+    public CommPortManager( CommPortCallback callback ) {
         this.callback = callback;
-    }*/
+    }
 
 }

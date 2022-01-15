@@ -47,17 +47,15 @@ public class terminalInterface extends javax.swing.JFrame {
         getImage(ClassLoader.getSystemResource("resources/terminal.png"));
         return retValue;
      }
-
-    /*static CommPortManager_old commPortManager = new CommPortManager_old((String data) -> {
+    
+    static CommPortManager commPortManager = new CommPortManager((String data) -> {
         String string_textarea = "";
         if ( show_time_enabled ) {
             string_textarea += java.time.LocalTime.now() + "  |  ";
         }
         string_textarea += data;
         setTextAreaText( string_textarea );
-    });*/
-    
-    static CommPortManager commPortManagerr = new CommPortManager();
+    });
     
     static public void setTextAreaText ( String string_textarea ) {
         jTextArea1.append( string_textarea );
@@ -257,8 +255,8 @@ public class terminalInterface extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         String input_data = evt.getActionCommand();
         input_data += input_ending;
-        if ( evt.getActionCommand().length() != 0 && commPortManagerr.get_current_port() != commPortManagerr.undefinedPort ) {
-            commPortManagerr.writeData( input_data );
+        if ( evt.getActionCommand().length() != 0 && commPortManager.get_current_port() != commPortManager.undefinedPort ) {
+            commPortManager.writeData( input_data );
         }
         jTextField1.setText("");
     }//GEN-LAST:event_jTextField1ActionPerformed
@@ -282,8 +280,8 @@ public class terminalInterface extends javax.swing.JFrame {
 
     private void jComboBoxCOMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCOMActionPerformed
         start_stream( (String)jComboBoxCOM.getSelectedItem(), (String)jComboBoxBaudrate.getSelectedItem() );
-        if ( commPortManagerr.get_current_port() != commPortManagerr.undefinedPort ) {
-            jComboBoxCOM.setSelectedItem(commPortManagerr.get_current_port());
+        if ( commPortManager.get_current_port() != commPortManager.undefinedPort ) {
+            jComboBoxCOM.setSelectedItem(commPortManager.get_current_port());
         }
     }//GEN-LAST:event_jComboBoxCOMActionPerformed
 
@@ -301,8 +299,8 @@ public class terminalInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxShowTimeActionPerformed
 
     private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
-        if( commPortManagerr.get_current_port() != commPortManagerr.undefinedPort ) {
-            commPortManagerr.disconnect();
+        if( commPortManager.get_current_port() != commPortManager.undefinedPort ) {
+            commPortManager.disconnect();
             jComboBoxCOM.setSelectedItem("--");
             clean();
         }
@@ -325,7 +323,7 @@ public class terminalInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxDarkActionPerformed
 
     static private void set_com_ports_list() {
-        ArrayList<String> ports_list = commPortManagerr.search_ports();
+        ArrayList<String> ports_list = commPortManager.search_ports();
         //ArrayList<String> ports_list = commPortManager.searchForPorts();
         String ports_array[] = null;
 
@@ -366,32 +364,25 @@ public class terminalInterface extends javax.swing.JFrame {
     
     private void start_stream(String port, String baud_rate_0 ) {
 
-        if( port == commPortManagerr.undefinedPort ) {
+        if( port == commPortManager.undefinedPort ) {
             return;
         }
-        if( commPortManagerr.get_current_port() != commPortManagerr.undefinedPort ) {
-            commPortManagerr.disconnect();
+        if( commPortManager.get_current_port() != commPortManager.undefinedPort ) {
+            commPortManager.disconnect();
         }
         clean();
         int baud = Integer.parseInt(baud_rate_0);
-        commPortManagerr.set_com_parameters( port, baud );
-        if ( !commPortManagerr.connect() ) {
+        commPortManager.set_com_parameters( port, baud );
+        if ( !commPortManager.connect() ) {
             this.setTitle( "ERROR" );
             jTextArea1.setText("ERROR. Failed to open " + port + "\r\n" );
             jComboBoxCOM.setSelectedItem("--");
             return;
         }
- 
-        System.out.println("OKEY");
-        boolean successful = commPortManagerr.initIOStream();
-        commPortManagerr.initListener();
-        /*if ( successful ) {
-            commPortManager.initListener();
-            this.setTitle( port );
-        }
-        else {
-            System.out.println( "Port error" );
-        }*/
+
+        commPortManager.initIOStream();
+        commPortManager.initListener();
+        this.setTitle( port );
     }
     
     public void clean(){
