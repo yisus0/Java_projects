@@ -55,7 +55,6 @@ public class CommPortManager implements SerialPortDataListener {
     String selectedPort = undefinedPort;
     String currentPort = undefinedPort;
     int baud_rate = 0;
-    boolean disconnection_demand = false;
 
     public void set_com_parameters(String port, int baud_rate_0 ) {
         selectedPort = port;
@@ -112,31 +111,6 @@ public class CommPortManager implements SerialPortDataListener {
         return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
     }
 
-    /*public void serialEvent(com.fazecast.jSerialComm.SerialPortEvent evt) {
-        if ( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE ) {
-            try {
-                System.out.println( "->"+serialPort.bytesAvailable());
-                while( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE && !disconnection_demand ) {
-                    byte singleData = (byte)input.read();
-                    string_textarea += (char)singleData;
-
-                    if (singleData == NEW_LINE_ASCII || singleData > 128) {
-                        callback.callback( string_textarea );
-                        string_textarea = "";
-                        //break;
-                    }
-                }
-                callback.callback(string_textarea);
-                string_textarea = "";    
-            }
-            catch (Exception e) {
-                System.out.println( "Failed to read data" );
-                callback.callback( string_textarea );
-                string_textarea = "";
-            }
-        }
-    }*/
-    
     public void serialEvent(com.fazecast.jSerialComm.SerialPortEvent evt) {
         if ( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE ) {
             int end = serialPort.bytesAvailable();
@@ -166,14 +140,12 @@ public class CommPortManager implements SerialPortDataListener {
     }
 
     public void disconnect() {
-        disconnection_demand = true;
         try {
             serialPort.removeDataListener();
             serialPort.closePort();
             input.close();
             output.close();
             currentPort = undefinedPort;
-            disconnection_demand = false;
             System.out.println( "Disconnected" );
         }
         catch (Exception e) {
