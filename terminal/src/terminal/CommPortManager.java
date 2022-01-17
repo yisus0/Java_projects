@@ -17,6 +17,8 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import java.util.Set;
 import java.util.TooManyListenersException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -110,25 +112,46 @@ public class CommPortManager implements SerialPortDataListener {
         return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
     }
 
-    public void serialEvent(com.fazecast.jSerialComm.SerialPortEvent evt) {
+    /*public void serialEvent(com.fazecast.jSerialComm.SerialPortEvent evt) {
         if ( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE ) {
-            try
-            {   
+            try {
+                System.out.println( "->"+serialPort.bytesAvailable());
                 while( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE && !disconnection_demand ) {
                     byte singleData = (byte)input.read();
                     string_textarea += (char)singleData;
 
                     if (singleData == NEW_LINE_ASCII || singleData > 128) {
-                        callback.callback(string_textarea);
+                        callback.callback( string_textarea );
                         string_textarea = "";
+                        //break;
                     }
                 }
+                callback.callback(string_textarea);
+                string_textarea = "";    
+            }
+            catch (Exception e) {
+                System.out.println( "Failed to read data" );
+                callback.callback( string_textarea );
+                string_textarea = "";
+            }
+        }
+    }*/
+    
+    public void serialEvent(com.fazecast.jSerialComm.SerialPortEvent evt) {
+        if ( evt.getEventType() == SerialPortEvent.DATA_AVAILABLE ) {
+            int end = serialPort.bytesAvailable();
+            try {
+                for ( int i = 0; i < end; i++ ) {
+                    byte singleData = (byte)input.read();
+                    string_textarea += (char)singleData;
+                }
+                callback.callback(string_textarea);
+                string_textarea = "";    
             }
             catch (Exception e) {
                 System.out.println( "Failed to read data" );
             }
         }
-        
     }
     
     public void writeData( String data ) {
