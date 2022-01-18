@@ -180,7 +180,7 @@ public class CommPortManager_old implements SerialPortEventListener {
                     string_textarea += (char)singleData;
 
                     if (singleData == NEW_LINE_ASCII || singleData > 128) {
-                        callback.callback(string_textarea);
+                        callback.callback(string_textarea, false);
                         string_textarea = "";
                     }
                 }

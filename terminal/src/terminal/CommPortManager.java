@@ -118,13 +118,22 @@ public class CommPortManager implements SerialPortDataListener {
                 for ( int i = 0; i < end; i++ ) {
                     byte singleData = (byte)input.read();
                     string_textarea += (char)singleData;
+                    if ( singleData == NEW_LINE_ASCII ) {
+                        publish_data( true ); 
+                    }
                 }
-                callback.callback(string_textarea);
-                string_textarea = "";    
+                publish_data( false );    
             }
             catch (Exception e) {
                 System.out.println( "Failed to read data" );
             }
+        }
+    }
+    
+    public void publish_data ( boolean end_line ) {
+        if ( string_textarea.length() > 0 ) {
+            callback.callback( string_textarea, end_line );
+            string_textarea = "";
         }
     }
     

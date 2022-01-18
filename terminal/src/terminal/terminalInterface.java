@@ -38,6 +38,7 @@ public class terminalInterface extends javax.swing.JFrame {
     static String input_ending = "\r\n";
     static String input_ending_selection = "None";
     static String baud_rate = "115200";
+    static boolean new_line = true;
     
     static ConfigurationManager configurationManager = new ConfigurationManager();
     
@@ -48,11 +49,12 @@ public class terminalInterface extends javax.swing.JFrame {
         return retValue;
      }
     
-    static CommPortManager commPortManager = new CommPortManager((String data) -> {
+    static CommPortManager commPortManager = new CommPortManager(( String data, boolean end_line ) -> {
         String string_textarea = "";
-        if ( show_time_enabled ) {
+        if ( show_time_enabled && new_line ) {
             string_textarea += java.time.LocalTime.now() + "  |  ";
         }
+        new_line = end_line;
         string_textarea += data;
         setTextAreaText( string_textarea );
     });

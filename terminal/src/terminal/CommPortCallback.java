@@ -11,6 +11,6 @@ package terminal;
  */
 public interface CommPortCallback {
 
-    void callback(String data);
+    void callback(String data, boolean end_line);
 
 }
