@@ -38,6 +38,7 @@ public class terminalInterface extends javax.swing.JFrame {
     static String input_ending = "\r\n";
     static String input_ending_selection = "None";
     static String baud_rate = "115200";
+    static boolean new_line = true;
     
     static ConfigurationManager configurationManager = new ConfigurationManager();
     
@@ -47,12 +48,13 @@ public class terminalInterface extends javax.swing.JFrame {
         getImage(ClassLoader.getSystemResource("resources/terminal.png"));
         return retValue;
      }
-
-    static CommPortManager commPortManager = new CommPortManager((String data) -> {
+    
+    static CommPortManager commPortManager = new CommPortManager(( String data, boolean end_line ) -> {
         String string_textarea = "";
-        if ( show_time_enabled ) {
+        if ( show_time_enabled && new_line ) {
             string_textarea += java.time.LocalTime.now() + "  |  ";
         }
+        new_line = end_line;
         string_textarea += data;
         setTextAreaText( string_textarea );
     });
@@ -102,7 +104,7 @@ public class terminalInterface extends javax.swing.JFrame {
         setIconImage(getIconImage());
 
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 12)); // NOI18N
+        jTextArea1.setFont(new java.awt.Font("Segoe UI Historic", 0, 13)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -128,7 +130,7 @@ public class terminalInterface extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxBaudrate.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "4800", "9600", "38400", "57600", "115200" }));
+        jComboBoxBaudrate.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "4800", "9600", "19200", "38400", "57600", "115200" }));
         jComboBoxBaudrate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxBaudrateActionPerformed(evt);
@@ -323,7 +325,8 @@ public class terminalInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxDarkActionPerformed
 
     static private void set_com_ports_list() {
-        ArrayList<String> ports_list = commPortManager.searchForPorts();
+        ArrayList<String> ports_list = commPortManager.search_ports();
+        //ArrayList<String> ports_list = commPortManager.searchForPorts();
         String ports_array[] = null;
 
         if ( ports_list.size() > 0 ) {
@@ -334,7 +337,7 @@ public class terminalInterface extends javax.swing.JFrame {
         jComboBoxCOM.setModel((ComboBoxModel) model);
     }
     
-    private void start_stream(String port, String baud_rate_0 ) {
+    /*private void start_streamm(String port, String baud_rate_0 ) {
 
         if( port == commPortManager.undefinedPort ) {
             return;
@@ -359,6 +362,29 @@ public class terminalInterface extends javax.swing.JFrame {
         else {
             System.out.println( "Port error" );
         }
+    }*/
+    
+    private void start_stream(String port, String baud_rate_0 ) {
+
+        if( port == commPortManager.undefinedPort ) {
+            return;
+        }
+        if( commPortManager.get_current_port() != commPortManager.undefinedPort ) {
+            commPortManager.disconnect();
+        }
+        clean();
+        int baud = Integer.parseInt(baud_rate_0);
+        commPortManager.set_com_parameters( port, baud );
+        if ( !commPortManager.connect() ) {
+            this.setTitle( "ERROR" );
+            jTextArea1.setText("ERROR. Failed to open " + port + "\r\n" );
+            jComboBoxCOM.setSelectedItem("--");
+            return;
+        }
+
+        commPortManager.initIOStream();
+        commPortManager.initListener();
+        this.setTitle( port );
     }
     
     public void clean(){
