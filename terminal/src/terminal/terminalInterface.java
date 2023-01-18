@@ -337,33 +337,6 @@ public class terminalInterface extends javax.swing.JFrame {
         jComboBoxCOM.setModel((ComboBoxModel) model);
     }
     
-    /*private void start_streamm(String port, String baud_rate_0 ) {
-
-        if( port == commPortManager.undefinedPort ) {
-            return;
-        }
-        if( commPortManager.get_current_port() != commPortManager.undefinedPort ) {
-            commPortManager.disconnect();
-        }
-        clean();
-        int baud = Integer.parseInt(baud_rate_0);
-        commPortManager.set_com_parameters( port, baud );
-        if ( !commPortManager.connect() ) {
-            this.setTitle( "ERROR" );
-            jTextArea1.setText("ERROR. Failed to open " + port + "\r\n" );
-            jComboBoxCOM.setSelectedItem("--");
-            return;
-        }
-        boolean successful = commPortManager.initIOStream();
-        if ( successful ) {
-            commPortManager.initListener();
-            this.setTitle( port );
-        }
-        else {
-            System.out.println( "Port error" );
-        }
-    }*/
-    
     private void start_stream(String port, String baud_rate_0 ) {
 
         if( port == commPortManager.undefinedPort ) {
